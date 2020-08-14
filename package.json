@@ -19,6 +19,17 @@
         "redux": "^4.0.5",
         "redux-thunk": "^2.3.0"
     },
+    "husky": {
+        "hooks": {
+            "pre-commit": "lint-staged"
+        }
+    },
+    "lint-staged": {
+        "*.js": [
+            "npm run lint:fix",
+            "npm run format"
+        ]
+    },
     "scripts": {
         "format": "prettier --write ./src",
         "lint": "eslint --debug ./src",
