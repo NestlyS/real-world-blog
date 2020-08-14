@@ -1,0 +1,38 @@
+@import '../../colors.module.scss';
+.header-body {
+    display: flex;
+    width: 100%;
+    background-color: $background-color-base;
+    align-items: center;
+}
+
+.title {
+    justify-self: start;
+    font-family: Inter;
+    font-style: normal;
+    font-weight: normal;
+    margin: 9px 22px 15px;
+    font-size: 18px;
+    line-height: 28px;
+    color: black;
+}
+
+.control-panel {
+    margin-left: auto;
+    display: flex;
+}
+
+.button {
+    text-decoration: none;
+    color: $heading-color;
+    font-size: 18px;
+    line-height: 1.5em;
+    padding: 6px 18px 10px;
+    margin: 16px 19px 13px;
+}
+
+.success-button {
+    color: $success-color;
+    border: 1px solid $success-color;
+    border-radius: 5px;
+}

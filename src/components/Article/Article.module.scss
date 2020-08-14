@@ -1,0 +1,96 @@
+@import '../../colors.module.scss';
+.article {
+    background-color: $background-color-base;
+    display: flex;
+    flex-wrap: wrap;
+    padding: 15px 16px 24px;
+    filter: drop-shadow(0px 4px 12px rgba(0, 0, 0, 0.15));
+}
+
+.header {
+    display: flex;
+    flex-wrap: wrap;
+    flex-basis: 70%;
+}
+
+.title {
+    margin-right: 12px;
+    text-decoration: none;
+    color: $info-color;
+    font-size: 20px;
+    line-height: 28px;
+}
+
+.like {
+    border: none;
+    background: none;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+}
+
+.tag-field {
+    flex-basis: 100%;
+    margin-top: 4px;
+}
+
+.tag-field>button {
+    border: 1px solid $text-color-secondary;
+    border-radius: 2px;
+    background: none;
+    padding: 2px 6px 3px;
+    cursor: pointer;
+    margin-right: 8px;
+}
+
+.author-info {
+    display: flex;
+    margin-left: auto;
+    align-items: flex-start;
+}
+
+.author-name {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    margin-right: 12px;
+}
+
+.author {
+    white-space: nowrap;
+    text-decoration: none;
+    font-size: 18px;
+    line-height: 1.5em;
+    color: $heading-color;
+    margin: 0;
+}
+
+.author:hover {
+    color: $info-color;
+}
+
+.date {
+    white-space: nowrap;
+    margin: 0;
+    font-size: 12px;
+    line-height: 1.8em;
+}
+
+.avatar {
+    width: 46px;
+    height: 46px;
+    object-fit: cover;
+    object-position: top;
+}
+
+.description {
+    font-size: 12px;
+    line-height: 1.5em;
+    flex-basis: 80%;
+    margin-top: 7px;
+}
+
+.body {
+    flex-basis: 100%;
+}
