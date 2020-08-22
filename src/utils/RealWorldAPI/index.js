@@ -1,3 +1,3 @@
-import { getArticles, getArticle } from './RealWorldAPI'
+import * as RealWorldAPI from "./RealWorldAPI";
 
-export { getArticles, getArticle }
+export default RealWorldAPI;
