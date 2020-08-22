@@ -1,0 +1,13 @@
+@import '../../../colors.module.scss';
+.button-primary {
+    width: 100%;
+    padding: 8px;
+    margin-top: 21px;
+    background-color: $info-color;
+    border-radius: 4px;
+    color: $background-color-base;
+    font-size: 16px;
+    line-height: 1.5em;
+    align-items: center;
+    border: none;
+}

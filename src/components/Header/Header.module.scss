@@ -25,14 +25,51 @@
 .button {
     text-decoration: none;
     color: $heading-color;
+    background-color: transparent;
     font-size: 18px;
     line-height: 1.5em;
     padding: 6px 18px 10px;
     margin: 16px 19px 13px;
+    border-radius: 5px;
+    cursor: pointer;
 }
 
 .success-button {
     color: $success-color;
     border: 1px solid $success-color;
-    border-radius: 5px;
+}
+
+.small-button {
+    padding: 6px 10px;
+    font-size: 14px;
+    line-height: 1.6em;
+    height: fit-content;
+}
+
+.profile {
+    display: flex;
+    align-items: center;
+}
+
+.avatar {
+    max-width: 48px;
+    max-height: 48px;
+    border-radius: 50%;
+}
+
+.username {
+    font-size: 18px;
+    line-height: 28px;
+    margin-right: 13px;
+    color: $text-color;
+}
+
+.username:hover {
+    transition: inherit;
+    color: inherit;
+}
+
+.gray-button {
+    color: $text-color;
+    border: 1px solid $text-color;
 }
