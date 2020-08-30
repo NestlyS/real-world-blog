@@ -6,8 +6,9 @@ import { connect } from "react-redux";
 import * as actions from "../../../redux/actions";
 
 import ArticleWrapper from "../../Article";
-import ErrorBlock from "../../ErrorBlock";
+import { ErrorBlock } from "../../Error";
 import CustomSpin from "../../CustonSpin";
+import StatusRender from "../../StatusRender";
 
 import cl from "./ArticleList.module.scss";
 import "./ArticleList.scss";
@@ -20,46 +21,42 @@ const ArticleList = ({
   loadArticles,
 }) => {
   const [page, setPage] = useState(1);
+  /* Загрузить список статей после загрузки страницы и обновлять их каждые 5 секунд */
   useEffect(() => {
     loadArticles(page);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [page]);
-
-  const renderError = () => {
-    return (
-      <ErrorBlock>
-        Error! Please, check your internet connection and try again
-      </ErrorBlock>
-    );
-  };
-
-  const renderLoading = () => {
-    return <CustomSpin />;
-  };
-
-  const renderArticleList = () => {
-    return articles.map((article) => {
-      return (
-        <li key={article.slug} className={cl.block}>
-          <ArticleWrapper article={article} />
-        </li>
-      );
-    });
-  };
-
-  const contentToRender = () => {
-    if (error) {
-      return renderError();
-    }
-    if (loading) {
-      return renderLoading();
-    }
-    return renderArticleList();
-  };
-
   return (
     <main>
-      <ul className={cl.content}>{contentToRender()}</ul>
+      <ul className={cl.content}>
+        <StatusRender
+          errorBlock={[
+            {
+              condition: error?.internet,
+              block: (
+                <ErrorBlock>
+                  Looks like there is problem with connection. Please, try again
+                  later.
+                </ErrorBlock>
+              ),
+            },
+          ]}
+          loadingBlock={{
+            condition: loading,
+            block: <CustomSpin />,
+          }}
+          dataBlock={{
+            condition: true,
+            block: articles.map((article) => {
+              return (
+                <li key={article.slug} className={cl.block}>
+                  <ArticleWrapper article={article} />
+                </li>
+              );
+            }),
+          }}
+        />
+      </ul>
       <Pagination
         onChange={setPage}
         className={cl.pagination}

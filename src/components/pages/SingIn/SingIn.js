@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { Link, Redirect } from "react-router-dom";
+import { Link } from "react-router-dom";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { useForm } from "react-hook-form";
@@ -7,27 +7,12 @@ import CustomSpin from "../../CustonSpin";
 import CustomInput from "../../CustomInput";
 import * as actions from "../../../redux/actions";
 import formStyles from "../../../formStyles.module.scss";
-import errorMessageBank from "../../CustomInput/ErrorMessageBank";
+import errorMessageBank from "../../../ErrorMessageBank";
+import StatusRender from "../../StatusRender";
 
-import cl from "./SingIn.module.scss";
-
-const SingIn = ({ login, unsetError, error: errorArray, loading, user }) => {
+const SingIn = ({ login, unsetError, error: errorArray, loading }) => {
   useEffect(unsetError, []);
   const { register, handleSubmit, errors } = useForm();
-
-  if (user) {
-    return <Redirect to="/" />;
-  }
-
-  const renderStatus = () => {
-    if (errorArray && errorArray["email or password"] !== null) {
-      return <div className={cl.error}>{errorMessageBank.form.invalid}</div>;
-    }
-    if (loading) {
-      return <CustomSpin />;
-    }
-    return null;
-  };
   const onSubmit = (data) => login(data.email, data.password);
   return (
     <form
@@ -37,7 +22,33 @@ const SingIn = ({ login, unsetError, error: errorArray, loading, user }) => {
       onSubmit={handleSubmit(onSubmit)}
     >
       <h2 className={formStyles["form-title"]}>Sing In</h2>
-      {renderStatus()}
+      <StatusRender
+        errorBlock={[
+          {
+            condition: errorArray && errorArray["email or password"],
+            block: (
+              <div className={formStyles.danger}>
+                {errorMessageBank.form.invalid}
+              </div>
+            ),
+          },
+          {
+            condition: errorArray?.internet,
+            block: (
+              <div className={formStyles.danger}>
+                {errorMessageBank.form.internet}
+              </div>
+            ),
+          },
+        ]}
+        loadingBlock={{
+          condition: loading,
+          block: <CustomSpin />,
+        }}
+        dataBlock={{
+          condition: false,
+        }}
+      />
       <CustomInput
         name="email"
         type="email"

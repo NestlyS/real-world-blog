@@ -1,37 +1,81 @@
+/* eslint-disable react/prop-types */
 import React, { useEffect } from "react";
 import PropTypes from "prop-types";
-import { bindActionCreators } from "redux";
 import { connect } from "react-redux";
 import * as actions from "../../../redux/actions";
 
-import ErrorBlock from "../../ErrorBlock";
+import { ErrorBlock } from "../../Error";
 import ArticleWrapper from "../../Article";
+import StatusRender from "../../StatusRender";
 import cl from "./SingleArticle.module.scss";
-import CustomSpin from "../../CustonSpin";
 
-function SingleArticle({ articleId, article, loading, error, loadArticle }) {
+function SingleArticle({
+  articleId,
+  user,
+  article,
+  loading,
+  error,
+  deleteArticle,
+  loadArticle,
+  history,
+}) {
+  /* Загрузить статью, если её ещё нет в хранилище или в хранилище не та статья */
   useEffect(() => {
     if (!article || article.slug !== articleId) {
       loadArticle(articleId);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-  if (error) {
-    // eslint-disable-next-line react/no-unescaped-entities
-    return <ErrorBlock>Couldn't load an article. Try again later</ErrorBlock>;
-  }
-  if (loading) {
-    return <CustomSpin />;
-  }
+  /* Функция, по которой определяется рендерить кнопки управления или нет. */
+  const getDeleteArticle = () => {
+    if (user.username !== article?.author.username) {
+      return null;
+    }
+    return async () => {
+      await deleteArticle(user.token, articleId);
+      history.replace("/");
+    };
+  };
   return (
-    <div className={cl["single-article"]}>
-      <ArticleWrapper article={article} extended />
-    </div>
+    <StatusRender
+      errorBlock={[
+        {
+          condition: error,
+          block: (
+            <ErrorBlock>
+              Couldn&apos;t load an article. Try again later
+            </ErrorBlock>
+          ),
+        },
+      ]}
+      loadingBlock={{
+        condition: loading || !article,
+      }}
+      dataBlock={{
+        condition: true,
+        block: (
+          <div className={cl["single-article"]}>
+            <ArticleWrapper
+              article={article}
+              deleteArticle={getDeleteArticle()}
+              extended
+            />
+          </div>
+        ),
+      }}
+    />
   );
 }
 
 SingleArticle.propTypes = {
   articleId: PropTypes.string.isRequired,
+  user: PropTypes.shape({
+    email: PropTypes.string,
+    token: PropTypes.string,
+    username: PropTypes.string,
+    bio: PropTypes.string,
+    image: PropTypes.string,
+  }),
   article: PropTypes.shape({
     author: PropTypes.shape({
       bio: PropTypes.string,
@@ -58,17 +102,21 @@ SingleArticle.defaultProps = {
   loading: false,
   error: null,
   article: null,
+  user: null,
 };
 
 const mapStateToProps = (state) => ({
   article: state.article.data,
   loading: state.article.loading,
   error: state.article.error,
+  user: state.user.data,
 });
 
-const mapDispatchToProps = (dispatch) => {
-  const { loadArticle } = bindActionCreators(actions, dispatch);
-  return { loadArticle };
+const mapDispatchToProps = {
+  loadArticle: actions.loadArticle,
+  deleteArticle: actions.deleteArticle,
+  favoriteArticle: actions.favoriteArticle,
+  unfavoriteArticle: actions.unfavoriteArticle,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(SingleArticle);

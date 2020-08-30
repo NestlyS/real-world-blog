@@ -1,4 +1,4 @@
-@import '../../colors.module.scss';
+@import "../../colors.module.scss";
 .header-body {
     display: flex;
     width: 100%;
@@ -52,8 +52,9 @@
 }
 
 .avatar {
-    max-width: 48px;
-    max-height: 48px;
+    width: 48px;
+    height: 48px;
+    object-fit: cover;
     border-radius: 50%;
 }
 

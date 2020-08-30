@@ -1,4 +1,4 @@
-@import './colors.module.scss';
+@import "./colors.module.scss";
 .form-block {
     background-color: $background-color-base;
     margin: 59px auto;
@@ -15,4 +15,12 @@
     font-size: 12px;
     line-height: 1.7em;
     margin-top: 8px;
+}
+
+.success {
+    color: $success-color;
+}
+
+.danger {
+    color: $highlight-color;
 }

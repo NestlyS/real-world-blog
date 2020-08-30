@@ -1,0 +1,22 @@
+.like {
+    border: none;
+    background: none;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+}
+
+.like::before {
+    content: "";
+    display: block;
+    width: 16px;
+    height: 14px;
+    background-image: url("../../assets/like.svg");
+    background-repeat: no-repeat;
+    background-size: contain;
+}
+
+.liked::before {
+    background-image: url("../../assets/like-checked.svg");
+}

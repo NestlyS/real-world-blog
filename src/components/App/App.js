@@ -1,31 +1,76 @@
 import React from "react";
 import { Route, Switch } from "react-router-dom";
+import { connect } from "react-redux";
+import PropTypes from "prop-types";
 
 import Header from "../Header";
 import ArticleList from "../pages/ArticleList";
 import SingleArticle from "../pages/SingleArticle";
-import ErrorBlock from "../ErrorBlock";
+import { ErrorBlock } from "../Error";
 import SingUp from "../pages/SingUp";
 import SingIn from "../pages/SingIn";
 import EditProfile from "../pages/EditProfile";
+import CreateArticle from "../pages/CreateArticle";
+import EditArticle from "../pages/EditArticle";
+import PrivateRoute from "../PrivateRoute/PrivateRoute";
 
-export default function App() {
+function App({ token }) {
   return (
     <div>
       <Header />
       <Switch>
-        <Route path="/profile" component={EditProfile} />
-        <Route path="/sing-up" component={SingUp} />
-        <Route path="/sing-in" component={SingIn} />
+        <Route
+          path="/new-article"
+          render={({ history }) => (
+            <PrivateRoute token={token} defaultPath="/sign-in">
+              <CreateArticle history={history} />
+            </PrivateRoute>
+          )}
+        />
+        <Route
+          path="/profile"
+          render={() => (
+            <PrivateRoute token={token} defaultPath="/sign-in">
+              <EditProfile />
+            </PrivateRoute>
+          )}
+        />
+        <Route
+          path="/sing-up"
+          render={() => (
+            <PrivateRoute token={!token} defaultPath="/">
+              <SingUp />
+            </PrivateRoute>
+          )}
+        />
+        <Route
+          path="/sing-in"
+          render={() => (
+            <PrivateRoute token={!token} defaultPath="/">
+              <SingIn />
+            </PrivateRoute>
+          )}
+        />
 
         <Route
-          path="/articles/:articleId"
-          render={({ match }) => {
+          path="/articles/:articleId/edit"
+          render={({ match, history }) => {
             const { articleId } = match.params;
-            return <SingleArticle articleId={articleId} />;
+            return (
+              <PrivateRoute token={token} defaultPath="/sign-in">
+                <EditArticle articleId={articleId} history={history} />
+              </PrivateRoute>
+            );
           }}
         />
-        <Route path="/articles/" component={ArticleList} />
+        <Route
+          path="/articles/:articleId"
+          render={({ match, history }) => {
+            const { articleId } = match.params;
+            return <SingleArticle articleId={articleId} history={history} />;
+          }}
+        />
+        <Route path="/articles" component={ArticleList} />
 
         <Route path="/" component={ArticleList} exact />
 
@@ -38,3 +83,17 @@ export default function App() {
     </div>
   );
 }
+
+App.propTypes = {
+  token: PropTypes.string,
+};
+
+App.defaultProps = {
+  token: null,
+};
+
+const mapStateToProps = (state) => ({
+  token: state?.user?.data?.token,
+});
+
+export default connect(mapStateToProps)(App);

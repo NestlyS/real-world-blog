@@ -1,4 +1,4 @@
-@import '../../index.module.scss';
+@import "../../index.module.scss";
 .block {
     background-color: $background-color-base;
     padding: 15px 19px;
@@ -19,25 +19,6 @@
     color: $info-color;
     font-size: 20px;
     line-height: 28px;
-}
-
-.like {
-    border: none;
-    background: none;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    cursor: pointer;
-}
-
-.like::before {
-    content: "";
-    display: block;
-    width: 16px;
-    height: 14px;
-    background-image: url('../../assets/like.svg');
-    background-repeat: no-repeat;
-    background-size: contain;
 }
 
 .tag-field {
@@ -99,8 +80,86 @@
     line-height: 1.5em;
     flex-basis: 80%;
     margin-top: 7px;
+    word-break: break-word;
+}
+
+.control-buttons {
+    flex-basis: 20%;
+    display: flex;
+}
+
+.button {
+    cursor: pointer;
+    margin-left: 12px;
+    background: none;
+    border: 1px solid transparent;
+    padding: 6px 17px;
+    height: fit-content;
+    border-radius: 4px;
+    font-size: 14px;
+    line-height: 1.6em;
+}
+
+.button-success {
+    border-color: $success-color;
+    color: $success-color;
+}
+
+.button-danger {
+    border-color: $highlight-color;
+    color: $highlight-color;
+}
+
+.modal-body {
+    position: absolute;
+    min-width: 27%;
+    transform: translate(100px, -10px);
+    padding: 12px 16px;
+    background: $background-color-base;
+    border-radius: 4px;
+    filter: drop-shadow(0px 4px 12px rgba(0, 0, 0, 0.15));
+}
+
+.modal-header {
+    display: flex;
+    align-items: flex-start;
+}
+
+.modal-header>img {
+    display: block;
+    margin-top: 0.3em;
+}
+
+.modal-header>* {
+    margin-right: 9px;
+}
+
+.modal-buttons {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 12px;
+}
+
+.button-small {
+    padding: 1px 8px;
+}
+
+.button-primary {
+    background: $info-color;
+    color: $background-color-base;
+    border: none;
+}
+
+.button-secondary {
+    background: $background-color-base;
+    color: $text-color-secondary;
+    border: 1px solid $border-color-base;
 }
 
 .body {
     flex-basis: 100%;
+}
+
+.body * {
+    width: 100%;
 }

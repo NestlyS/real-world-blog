@@ -1,0 +1,57 @@
+@import '../../colors.module.scss';
+.form {
+    min-width: 60%;
+    margin: 34px auto;
+}
+
+.tags-container {
+    margin-top: 12px;
+    margin-right: auto;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+}
+
+.label {
+    color: $heading-color;
+    font-size: 14px;
+    line-height: 1.6em;
+    flex-basis: 100%;
+}
+
+.tagsBody {
+    display: flex;
+    align-items: baseline;
+    flex-direction: column;
+}
+
+.tagField {
+    margin-top: 5px;
+    display: flex;
+    align-items: baseline;
+}
+
+.button {
+    background-color: transparent;
+    height: min-content;
+    padding: 8px 40px;
+    margin-left: 17px;
+    border-radius: 4px;
+    border: 1px solid transparent;
+    cursor: pointer;
+}
+
+.danger {
+    border-color: $highlight-color;
+    color: $highlight-color;
+}
+
+.primary {
+    border-color: $info-color;
+    color: $info-color;
+}
+
+.submit-button {
+    width: 55%;
+    margin-right: auto;
+}

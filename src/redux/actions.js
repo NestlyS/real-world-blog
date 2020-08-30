@@ -1,7 +1,7 @@
 import RealWorldAPI from "../utils/RealWorldAPI";
 import * as types from "./actionTypes";
 
-export const getData = ({
+export const proxyRealworldAPI = ({
   loadingAction,
   dataAction,
   errorAction,
@@ -18,9 +18,7 @@ export const getData = ({
       // Если нет ответа от сервера = нет Интернета
       errorData = {
         // в идеальном случае
-        errors: {
-          internet: "no connection",
-        },
+        internet: "no connection",
       };
     }
     dispatch({ type: errorAction, payload: { error: errorData } });
@@ -28,7 +26,7 @@ export const getData = ({
 };
 
 export const loadArticles = (page = 1) =>
-  getData({
+  proxyRealworldAPI({
     loadingAction: types.articlesLoading,
     dataAction: types.articlesData,
     errorAction: types.articlesError,
@@ -37,7 +35,7 @@ export const loadArticles = (page = 1) =>
   });
 
 export const loadArticle = (articleId) =>
-  getData({
+  proxyRealworldAPI({
     loadingAction: types.articleLoading,
     dataAction: types.articleData,
     errorAction: types.articleError,
@@ -46,7 +44,7 @@ export const loadArticle = (articleId) =>
   });
 
 export const register = (email, username, password) =>
-  getData({
+  proxyRealworldAPI({
     loadingAction: types.userLoading,
     dataAction: types.userData,
     errorAction: types.userError,
@@ -55,7 +53,7 @@ export const register = (email, username, password) =>
   });
 
 export const login = (email, password) =>
-  getData({
+  proxyRealworldAPI({
     loadingAction: types.userLoading,
     dataAction: types.userData,
     errorAction: types.userError,
@@ -63,13 +61,68 @@ export const login = (email, password) =>
     args: [email, password],
   });
 
-export const update = (updateData) =>
-  getData({
+export const update = (token, email, password, username, image) =>
+  proxyRealworldAPI({
     loadingAction: types.userLoading,
     dataAction: types.userData,
     errorAction: types.userError,
     asyncCallback: RealWorldAPI.update.bind(RealWorldAPI),
-    args: [updateData],
+    args: [token, email, username, password, image],
+  });
+
+export const createArticle = (token, title, description, body, tagList) =>
+  proxyRealworldAPI({
+    loadingAction: types.articleLoading,
+    dataAction: types.articleData,
+    errorAction: types.articleError,
+    asyncCallback: RealWorldAPI.createArticle.bind(RealWorldAPI),
+    args: [token, title, description, body, tagList],
+  });
+
+export const updateArticle = (
+  token,
+  title,
+  description,
+  body,
+  tagList,
+  articleId
+) =>
+  proxyRealworldAPI({
+    loadingAction: types.articleLoading,
+    dataAction: types.articleData,
+    errorAction: types.articleError,
+    asyncCallback: RealWorldAPI.updateArticle.bind(RealWorldAPI),
+    args: [token, title, description, body, tagList, articleId],
+  });
+
+export const deleteArticle = (token, articleId) => async (dispatch) => {
+  try {
+    await RealWorldAPI.deleteArticle(token, articleId);
+    dispatch({ type: types.articleData, payload: { data: { article: null } } });
+  } catch (error) {
+    dispatch({
+      type: types.articleError,
+      payload: { error: error?.response?.data?.errors },
+    });
+  }
+};
+
+export const favoriteArticle = (token, articleId) =>
+  proxyRealworldAPI({
+    loadingAction: types.articleLoading,
+    dataAction: types.articleData,
+    errorAction: types.articleError,
+    asyncCallback: RealWorldAPI.favoriteArticle.bind(RealWorldAPI),
+    args: [token, articleId],
+  });
+
+export const unfavoriteArticle = (token, articleId) =>
+  proxyRealworldAPI({
+    loadingAction: types.articleLoading,
+    dataAction: types.articleData,
+    errorAction: types.articleError,
+    asyncCallback: RealWorldAPI.favoriteArticle.bind(RealWorldAPI),
+    args: [token, articleId],
   });
 
 export const logout = () => ({

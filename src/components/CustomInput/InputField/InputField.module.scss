@@ -1,4 +1,4 @@
-@import '../../../colors.module.scss';
+@import "../../../colors.module.scss";
 .container {
     margin-top: 12px;
     width: 100%;
@@ -9,7 +9,7 @@
     border: 1px solid $border-color-base;
     border-radius: 4px;
     padding: 8px 12px;
-    width: 100%
+    width: 100%;
 }
 
 .input::placeholder {
@@ -32,4 +32,8 @@
     color: $highlight-color;
     font-size: 14px;
     line-height: 1.7em;
+}
+
+.short {
+    margin-top: 0;
 }

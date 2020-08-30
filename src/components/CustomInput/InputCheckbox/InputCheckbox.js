@@ -1,6 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
-import errorMessageBank from "../ErrorMessageBank";
+import errorMessageBank from "../../../ErrorMessageBank";
 import cl from "./InputCheckbox.module.scss";
 
 const InputCheckbox = React.forwardRef(function InputCheckbox(

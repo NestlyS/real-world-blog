@@ -48,17 +48,108 @@ export async function authentication(email, password) {
   return responce.data;
 }
 
-export async function update({ email, password, username, image, token }) {
+export async function update(token, email, password, username, image) {
+  const user = {
+    email,
+    username,
+  };
+  if (password) {
+    user.password = password;
+  }
+  if (image) {
+    user.image = image;
+  }
   const responce = await axios.put(
     `${baseUrl}/user`,
     {
-      user: {
-        email,
-        password,
-        username,
-        image,
-      },
+      user,
     },
+    {
+      headers: {
+        Authorization: `Token ${token}`,
+      },
+    }
+  );
+  return responce.data;
+}
+
+export async function createArticle(token, title, description, body, tagList) {
+  const article = {
+    title,
+    description,
+    body,
+  };
+  if (tagList) {
+    article.tagList = tagList;
+  }
+  const responce = await axios.post(
+    `${baseUrl}/articles`,
+    {
+      article,
+    },
+    {
+      headers: {
+        Authorization: `Token ${token}`,
+      },
+    }
+  );
+  return responce.data;
+}
+
+export async function updateArticle(
+  token,
+  title,
+  description,
+  body,
+  tagList,
+  articleId
+) {
+  const article = {
+    title,
+    description,
+    body,
+  };
+  if (tagList) {
+    article.tagList = tagList;
+  }
+  const responce = await axios.put(
+    `${baseUrl}/articles/${articleId}`,
+    {
+      article,
+    },
+    {
+      headers: {
+        Authorization: `Token ${token}`,
+      },
+    }
+  );
+  return responce.data;
+}
+
+export async function deleteArticle(token, articleId) {
+  const responce = await axios.delete(`${baseUrl}/articles/${articleId}`, {
+    headers: {
+      Authorization: `Token ${token}`,
+    },
+  });
+  return responce.data;
+}
+
+export async function favoriteArticle(token, articleId) {
+  const responce = await axios.post(
+    `${baseUrl}/articles/${articleId}/favorite`,
+    {
+      headers: {
+        Authorization: `Token ${token}`,
+      },
+    }
+  );
+  return responce.data;
+}
+
+export async function unfavoriteArticle(token, articleId) {
+  const responce = await axios.post(
+    `${baseUrl}/articles/${articleId}/favorite`,
     {
       headers: {
         Authorization: `Token ${token}`,

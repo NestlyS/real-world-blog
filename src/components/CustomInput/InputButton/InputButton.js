@@ -7,7 +7,7 @@ function InputButton({ type, text }) {
     <button
       // eslint-disable-next-line react/button-has-type
       type={type}
-      className={classes["button-primary"]}
+      className={`${classes.button} ${classes["primary-filled"]}`}
     >
       {text}
     </button>
