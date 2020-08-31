@@ -1,26 +1,26 @@
 @import "./colors.module.scss";
 .form-block {
-    background-color: $background-color-base;
-    margin: 59px auto;
-    padding: 48px 32px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    max-width: 400px;
-    filter: drop-shadow(0px 4px 12px rgba(0, 0, 0, 0.15));
+  background-color: $background-color-base;
+  margin: 59px auto;
+  padding: 48px 32px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  max-width: 400px;
+  filter: drop-shadow(0px 4px 12px rgba(0, 0, 0, 0.15));
 }
 
 .secondary-text {
-    color: $text-color-secondary;
-    font-size: 12px;
-    line-height: 1.7em;
-    margin-top: 8px;
+  color: $text-color-secondary;
+  font-size: 12px;
+  line-height: 1.7em;
+  margin-top: 8px;
 }
 
 .success {
-    color: $success-color;
+  color: $success-color;
 }
 
 .danger {
-    color: $highlight-color;
+  color: $highlight-color;
 }

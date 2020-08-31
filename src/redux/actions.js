@@ -25,22 +25,22 @@ export const proxyRealworldAPI = ({
   }
 };
 
-export const loadArticles = (page = 1) =>
+export const loadArticles = (page = 1, token) =>
   proxyRealworldAPI({
     loadingAction: types.articlesLoading,
     dataAction: types.articlesData,
     errorAction: types.articlesError,
     asyncCallback: RealWorldAPI.getArticles.bind(RealWorldAPI),
-    args: [page],
+    args: [page, token],
   });
 
-export const loadArticle = (articleId) =>
+export const loadArticle = (articleId, token) =>
   proxyRealworldAPI({
     loadingAction: types.articleLoading,
     dataAction: types.articleData,
     errorAction: types.articleError,
     asyncCallback: RealWorldAPI.getArticle.bind(RealWorldAPI),
-    args: [articleId],
+    args: [articleId, token],
   });
 
 export const register = (email, username, password) =>
@@ -121,7 +121,7 @@ export const unfavoriteArticle = (token, articleId) =>
     loadingAction: types.articleLoading,
     dataAction: types.articleData,
     errorAction: types.articleError,
-    asyncCallback: RealWorldAPI.favoriteArticle.bind(RealWorldAPI),
+    asyncCallback: RealWorldAPI.unfavoriteArticle.bind(RealWorldAPI),
     args: [token, articleId],
   });
 

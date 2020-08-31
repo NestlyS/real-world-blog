@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from "react";
+/* eslint-disable react/prop-types */
+import React, { useEffect } from "react";
 import { Pagination } from "antd";
 import PropTypes from "prop-types";
-import { bindActionCreators } from "redux";
 import { connect } from "react-redux";
 import * as actions from "../../../redux/actions";
 
@@ -14,16 +14,32 @@ import cl from "./ArticleList.module.scss";
 import "./ArticleList.scss";
 
 const ArticleList = ({
+  token,
   loading,
   error,
   articles,
+  page,
+  history,
   totalPages,
-  loadArticles,
+  loadArticles: loadArticlesInitial,
+  favoriteArticle: favoriteArticleInitial,
+  unfavoriteArticle: unfavoriteArticleInitial,
 }) => {
-  const [page, setPage] = useState(1);
+  const loadArticles = () => loadArticlesInitial(page, token);
+  const favoriteArticle = async (articleId) => {
+    await favoriteArticleInitial(token, articleId);
+    loadArticles();
+  };
+  const unfavoriteArticle = async (articleId) => {
+    await unfavoriteArticleInitial(token, articleId);
+    loadArticles();
+  };
+  const setPage = (newPage) => {
+    history.replace(`/${newPage}`);
+  };
   /* Загрузить список статей после загрузки страницы и обновлять их каждые 5 секунд */
   useEffect(() => {
-    loadArticles(page);
+    loadArticles();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [page]);
   return (
@@ -50,7 +66,11 @@ const ArticleList = ({
             block: articles.map((article) => {
               return (
                 <li key={article.slug} className={cl.block}>
-                  <ArticleWrapper article={article} />
+                  <ArticleWrapper
+                    article={article}
+                    favoriteArticle={() => favoriteArticle(article.slug)}
+                    unfavoriteArticle={() => unfavoriteArticle(article.slug)}
+                  />
                 </li>
               );
             }),
@@ -61,8 +81,9 @@ const ArticleList = ({
         onChange={setPage}
         className={cl.pagination}
         defaultCurrent={1}
-        current={page}
+        current={Number(page)}
         total={totalPages}
+        defaultPageSize={1}
         hideOnSinglePage
         showSizeChanger={false}
         responsive
@@ -86,7 +107,10 @@ const ArticleList = ({
 };
 
 ArticleList.propTypes = {
+  token: PropTypes.string,
   loadArticles: PropTypes.func.isRequired,
+  favoriteArticle: PropTypes.func.isRequired,
+  unfavoriteArticle: PropTypes.func.isRequired,
   loading: PropTypes.bool,
   error: PropTypes.instanceOf(Error),
   articles: PropTypes.arrayOf(
@@ -109,25 +133,30 @@ ArticleList.propTypes = {
     })
   ),
   totalPages: PropTypes.number,
+  page: PropTypes.string,
 };
 
 ArticleList.defaultProps = {
+  token: "",
   loading: false,
   error: null,
   articles: [],
   totalPages: 1,
+  page: "1",
 };
 
 const mapStateToProps = (state) => ({
+  token: state?.user?.data?.token,
   loading: state.articles.loading,
   error: state.articles.error,
   articles: state.articles.data,
   totalPages: state.articles.totalPages,
 });
 
-const mapDispatchToProps = (dispatch) => {
-  const { loadArticles } = bindActionCreators(actions, dispatch);
-  return { loadArticles };
+const mapDispatchToProps = {
+  loadArticles: actions.loadArticles,
+  favoriteArticle: actions.favoriteArticle,
+  unfavoriteArticle: actions.unfavoriteArticle,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(ArticleList);

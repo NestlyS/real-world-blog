@@ -1,22 +1,19 @@
-import React, { useState } from "react";
+import React from "react";
 import classNames from "classnames";
 import PropTypes from "prop-types";
 import cl from "./LikeButton.module.scss";
 
-function LikeButton({ isLiked: initialIsLiked, likesCount, like, unlike }) {
-  const [isLiked, setLiked] = useState(initialIsLiked);
+function LikeButton({ isLiked, likesCount, like, unlike }) {
   const onClick = () => {
+    /* Функций лайка нет - ничего не делаем. */
     if (!like || !unlike) {
       return;
     }
-    setLiked((liked) => {
-      if (liked) {
-        unlike();
-      } else {
-        like();
-      }
-      return !liked;
-    });
+    if (isLiked) {
+      unlike();
+    } else {
+      like();
+    }
   };
   return (
     <button

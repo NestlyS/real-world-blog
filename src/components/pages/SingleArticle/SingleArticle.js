@@ -17,12 +17,14 @@ function SingleArticle({
   error,
   deleteArticle,
   loadArticle,
+  favoriteArticle,
+  unfavoriteArticle,
   history,
 }) {
   /* Загрузить статью, если её ещё нет в хранилище или в хранилище не та статья */
   useEffect(() => {
     if (!article || article.slug !== articleId) {
-      loadArticle(articleId);
+      loadArticle(articleId, user.token);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -58,6 +60,10 @@ function SingleArticle({
             <ArticleWrapper
               article={article}
               deleteArticle={getDeleteArticle()}
+              favoriteArticle={() => favoriteArticle(user.token, article.slug)}
+              unfavoriteArticle={() =>
+                unfavoriteArticle(user.token, article.slug)
+              }
               extended
             />
           </div>
@@ -96,6 +102,8 @@ SingleArticle.propTypes = {
   loading: PropTypes.bool,
   error: PropTypes.bool,
   loadArticle: PropTypes.func.isRequired,
+  favoriteArticle: PropTypes.func.isRequired,
+  unfavoriteArticle: PropTypes.func.isRequired,
 };
 
 SingleArticle.defaultProps = {

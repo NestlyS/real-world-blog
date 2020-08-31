@@ -47,7 +47,7 @@ EditArticle.propTypes = {
   loadArticle: PropTypes.func.isRequired,
   token: PropTypes.string,
   loading: PropTypes.bool,
-  error: PropTypes.instanceOf(Error),
+  error: PropTypes.objectOf(PropTypes.arrayOf(PropTypes.string)),
   article: PropTypes.shape({
     author: PropTypes.shape({
       bio: PropTypes.string,

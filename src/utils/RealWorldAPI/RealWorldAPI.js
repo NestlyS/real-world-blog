@@ -5,7 +5,11 @@ import {
 
 const baseUrl = "https://conduit.productionready.io/api";
 
-export async function getArticles(page = 1) {
+export async function getArticles(page = 1, token) {
+  const headers = {};
+  if (token) {
+    headers.Authorization = `Token ${token}`;
+  }
   const responce = await axios.get(`${baseUrl}/articles`, {
     params: {
       limit,
@@ -15,6 +19,7 @@ export async function getArticles(page = 1) {
                 сообщения с определенным смещением, причем на
                 первой странице смещение = 0. */
     },
+    headers,
   });
   return {
     totalPages: responce.data.articlesCount / limit,
@@ -22,8 +27,14 @@ export async function getArticles(page = 1) {
   };
 }
 
-export async function getArticle(articleId) {
-  const responce = await axios.get(`${baseUrl}/articles/${articleId}`);
+export async function getArticle(articleId, token) {
+  const headers = {};
+  if (token) {
+    headers.Authorization = `Token ${token}`;
+  }
+  const responce = await axios.get(`${baseUrl}/articles/${articleId}`, {
+    headers,
+  });
   return responce.data;
 }
 
@@ -138,6 +149,7 @@ export async function deleteArticle(token, articleId) {
 export async function favoriteArticle(token, articleId) {
   const responce = await axios.post(
     `${baseUrl}/articles/${articleId}/favorite`,
+    null,
     {
       headers: {
         Authorization: `Token ${token}`,
@@ -148,7 +160,7 @@ export async function favoriteArticle(token, articleId) {
 }
 
 export async function unfavoriteArticle(token, articleId) {
-  const responce = await axios.post(
+  const responce = await axios.delete(
     `${baseUrl}/articles/${articleId}/favorite`,
     {
       headers: {

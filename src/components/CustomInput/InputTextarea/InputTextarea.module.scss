@@ -1,35 +1,35 @@
 @import "../../../colors.module.scss";
 .container {
-    margin-top: 12px;
-    width: 100%;
+  margin-top: 12px;
+  width: 100%;
 }
 
 .input {
-    background-color: $background-color-base;
-    border: 1px solid $border-color-base;
-    border-radius: 4px;
-    padding: 8px 12px;
-    width: 100%;
+  background-color: $background-color-base;
+  border: 1px solid $border-color-base;
+  border-radius: 4px;
+  padding: 8px 12px;
+  width: 100%;
 }
 
 .input::placeholder {
-    color: $placeholder-color;
-    font-size: 16px;
+  color: $placeholder-color;
+  font-size: 16px;
 }
 
 .label {
-    font-size: 14px;
-    line-height: 1.6em;
-    color: $heading-color;
-    margin: 0;
+  font-size: 14px;
+  line-height: 1.6em;
+  color: $heading-color;
+  margin: 0;
 }
 
 .input-error {
-    border-color: $highlight-color;
+  border-color: $highlight-color;
 }
 
 .error-message {
-    color: $highlight-color;
-    font-size: 14px;
-    line-height: 1.7em;
+  color: $highlight-color;
+  font-size: 14px;
+  line-height: 1.7em;
 }

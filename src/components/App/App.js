@@ -70,8 +70,14 @@ function App({ token }) {
             return <SingleArticle articleId={articleId} history={history} />;
           }}
         />
-        <Route path="/articles" component={ArticleList} />
-
+        <Route
+          path="/:page"
+          render={({ match, history }) => {
+            const { page } = match.params;
+            return <ArticleList page={page} history={history} />;
+          }}
+        />
+        <Route path="/articles/" component={ArticleList} exact />
         <Route path="/" component={ArticleList} exact />
 
         <Route

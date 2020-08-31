@@ -5,6 +5,7 @@
     justify-content: space-between;
     align-items: center;
     cursor: pointer;
+    transform: translateY(-10%);
 }
 
 .like::before {
@@ -15,6 +16,7 @@
     background-image: url("../../assets/like.svg");
     background-repeat: no-repeat;
     background-size: contain;
+    transform: translateX(-30%);
 }
 
 .liked::before {

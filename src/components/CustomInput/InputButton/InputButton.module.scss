@@ -1,29 +1,29 @@
 @import "../../../colors.module.scss";
 .button {
-    width: 100%;
-    padding: 8px;
-    margin-top: 21px;
-    border-radius: 4px;
-    font-size: 16px;
-    line-height: 1.5em;
-    align-items: center;
-    border: none;
-    cursor: pointer;
+  width: 100%;
+  padding: 8px;
+  margin-top: 21px;
+  border-radius: 4px;
+  font-size: 16px;
+  line-height: 1.5em;
+  align-items: center;
+  border: none;
+  cursor: pointer;
 }
 
 .primary-filled {
-    background-color: $info-color;
-    color: $background-color-base;
+  background-color: $info-color;
+  color: $background-color-base;
 }
 
 .primary {
-    background-color: transparent;
-    border: 1px solid $info-color;
-    color: $info-color;
+  background-color: transparent;
+  border: 1px solid $info-color;
+  color: $info-color;
 }
 
 .danger {
-    background-color: transparent;
-    border: 1px solid $highlight-color;
-    color: $highlight-color;
+  background-color: transparent;
+  border: 1px solid $highlight-color;
+  color: $highlight-color;
 }
