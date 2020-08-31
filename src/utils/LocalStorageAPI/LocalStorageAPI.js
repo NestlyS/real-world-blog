@@ -10,7 +10,7 @@ export const load = (key) => {
 };
 
 export const middleware = () => (next) => (action) => {
-  if (action.type === userData && action?.payload?.data?.user !== undefined) {
+  if (action?.type === userData && action?.payload?.data?.user !== undefined) {
     save("user", JSON.stringify(action.payload.data.user));
   }
   next(action);

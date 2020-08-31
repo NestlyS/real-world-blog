@@ -1,6 +1,8 @@
 const errorMessageBank = {
   form: {
     invalid: "Password or email is invalid. \n Please, check it and try again.",
+    internet:
+      "Looks like there's problem with connection. Please, come later and try again!",
   },
   username: {
     required: "Username is required",
@@ -27,6 +29,15 @@ const errorMessageBank = {
   },
   image: {
     pattern: "Please, input valid url.",
+  },
+  title: {
+    required: "You need a title to your article.",
+  },
+  short: {
+    required: "You need a short description to your article.",
+  },
+  body: {
+    required: "You need a body to your article.",
   },
 };
 

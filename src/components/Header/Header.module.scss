@@ -1,75 +1,76 @@
-@import '../../colors.module.scss';
+@import "../../colors.module.scss";
 .header-body {
-    display: flex;
-    width: 100%;
-    background-color: $background-color-base;
-    align-items: center;
+  display: flex;
+  width: 100%;
+  background-color: $background-color-base;
+  align-items: center;
 }
 
 .title {
-    justify-self: start;
-    font-family: Inter;
-    font-style: normal;
-    font-weight: normal;
-    margin: 9px 22px 15px;
-    font-size: 18px;
-    line-height: 28px;
-    color: black;
+  justify-self: start;
+  font-family: Inter;
+  font-style: normal;
+  font-weight: normal;
+  margin: 9px 22px 15px;
+  font-size: 18px;
+  line-height: 28px;
+  color: black;
 }
 
 .control-panel {
-    margin-left: auto;
-    display: flex;
+  margin-left: auto;
+  display: flex;
 }
 
 .button {
-    text-decoration: none;
-    color: $heading-color;
-    background-color: transparent;
-    font-size: 18px;
-    line-height: 1.5em;
-    padding: 6px 18px 10px;
-    margin: 16px 19px 13px;
-    border-radius: 5px;
-    cursor: pointer;
+  text-decoration: none;
+  color: $heading-color;
+  background-color: transparent;
+  font-size: 18px;
+  line-height: 1.5em;
+  padding: 6px 18px 10px;
+  margin: 16px 19px 13px;
+  border-radius: 5px;
+  cursor: pointer;
 }
 
 .success-button {
-    color: $success-color;
-    border: 1px solid $success-color;
+  color: $success-color;
+  border: 1px solid $success-color;
 }
 
 .small-button {
-    padding: 6px 10px;
-    font-size: 14px;
-    line-height: 1.6em;
-    height: fit-content;
+  padding: 6px 10px;
+  font-size: 14px;
+  line-height: 1.6em;
+  height: fit-content;
 }
 
 .profile {
-    display: flex;
-    align-items: center;
+  display: flex;
+  align-items: center;
 }
 
 .avatar {
-    max-width: 48px;
-    max-height: 48px;
-    border-radius: 50%;
+  width: 48px;
+  height: 48px;
+  object-fit: cover;
+  border-radius: 50%;
 }
 
 .username {
-    font-size: 18px;
-    line-height: 28px;
-    margin-right: 13px;
-    color: $text-color;
+  font-size: 18px;
+  line-height: 28px;
+  margin-right: 13px;
+  color: $text-color;
 }
 
 .username:hover {
-    transition: inherit;
-    color: inherit;
+  transition: inherit;
+  color: inherit;
 }
 
 .gray-button {
-    color: $text-color;
-    border: 1px solid $text-color;
+  color: $text-color;
+  border: 1px solid $text-color;
 }

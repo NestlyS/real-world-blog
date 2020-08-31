@@ -1,26 +1,26 @@
-@import '../../../colors.module.scss';
+@import "../../../colors.module.scss";
 .content {
-    display: flex;
-    flex-direction: column;
-    list-style-type: none;
-    width: 70%;
-    margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  list-style-type: none;
+  width: 70%;
+  margin: 0 auto;
 }
 
 .block {
-    margin-top: 26px;
+  margin-top: 26px;
 }
 
 .pagination {
-    margin: 16px auto;
-    display: flex;
-    justify-content: center;
+  margin: 16px auto;
+  display: flex;
+  justify-content: center;
 }
 
 .prev-pagination {
-    transform: translateX(-60%);
+  transform: translateX(-60%);
 }
 
 .next-pagination {
-    transform: translateX(60%);
+  transform: translateX(60%);
 }

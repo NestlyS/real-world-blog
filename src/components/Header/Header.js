@@ -19,7 +19,7 @@ const Header = ({ user, logout, history }) => {
       return (
         <div className={cl["control-panel"]}>
           <Link
-            to="/"
+            to="/new-article"
             className={`${cl.button} ${cl["success-button"]} ${cl["small-button"]}`}
           >
             Create article
@@ -65,7 +65,7 @@ const Header = ({ user, logout, history }) => {
 
 Header.propTypes = {
   loading: PropTypes.bool,
-  error: PropTypes.instanceOf(Error),
+  error: PropTypes.objectOf(PropTypes.arrayOf(PropTypes.string)),
   user: PropTypes.shape({
     email: PropTypes.string,
     token: PropTypes.string,
