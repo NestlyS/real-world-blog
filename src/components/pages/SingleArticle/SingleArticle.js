@@ -2,7 +2,10 @@
 import React, { useEffect } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
-import * as actions from "../../../redux/actions";
+import { cloneDeep } from "lodash";
+
+import * as asyncActions from "../../../redux/AsyncActions";
+import * as syncActions from "../../../redux/SyncActions";
 
 import { ErrorBlock } from "../../Error";
 import ArticleWrapper from "../../Article";
@@ -19,22 +22,23 @@ function SingleArticle({
   loadArticle,
   favoriteArticle,
   unfavoriteArticle,
+  articleSetData,
   history,
 }) {
   /* Загрузить статью, если её ещё нет в хранилище или в хранилище не та статья */
   useEffect(() => {
     if (!article || article.slug !== articleId) {
-      loadArticle(articleId, user.token);
+      loadArticle(articleId, user?.token);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   /* Функция, по которой определяется рендерить кнопки управления или нет. */
   const getDeleteArticle = () => {
-    if (user.username !== article?.author.username) {
+    if (user?.username !== article?.author.username) {
       return null;
     }
     return async () => {
-      await deleteArticle(user.token, articleId);
+      await deleteArticle(articleId);
       history.replace("/");
     };
   };
@@ -60,10 +64,20 @@ function SingleArticle({
             <ArticleWrapper
               article={article}
               deleteArticle={getDeleteArticle()}
-              favoriteArticle={() => favoriteArticle(user.token, article.slug)}
-              unfavoriteArticle={() =>
-                unfavoriteArticle(user.token, article.slug)
-              }
+              favoriteArticle={() => {
+                favoriteArticle(article.slug);
+                const clone = cloneDeep(article);
+                clone.favorited = true;
+                clone.favoritesCount += 1;
+                articleSetData(clone);
+              }}
+              unfavoriteArticle={() => {
+                unfavoriteArticle(article.slug);
+                const clone = cloneDeep(article);
+                clone.favorited = false;
+                clone.favoritesCount -= 1;
+                articleSetData(clone);
+              }}
               extended
             />
           </div>
@@ -104,6 +118,7 @@ SingleArticle.propTypes = {
   loadArticle: PropTypes.func.isRequired,
   favoriteArticle: PropTypes.func.isRequired,
   unfavoriteArticle: PropTypes.func.isRequired,
+  articleSetData: PropTypes.func.isRequired,
 };
 
 SingleArticle.defaultProps = {
@@ -121,10 +136,11 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = {
-  loadArticle: actions.loadArticle,
-  deleteArticle: actions.deleteArticle,
-  favoriteArticle: actions.favoriteArticle,
-  unfavoriteArticle: actions.unfavoriteArticle,
+  loadArticle: asyncActions.loadArticle,
+  deleteArticle: asyncActions.deleteArticle,
+  favoriteArticle: asyncActions.favoriteArticle,
+  unfavoriteArticle: asyncActions.unfavoriteArticle,
+  articleSetData: syncActions.articleSetData,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(SingleArticle);

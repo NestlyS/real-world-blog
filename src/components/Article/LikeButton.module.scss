@@ -1,24 +1,24 @@
 .like {
-    border: none;
-    background: none;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    cursor: pointer;
-    transform: translateY(-10%);
+  border: none;
+  background: none;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+  transform: translateY(-10%);
 }
 
 .like::before {
-    content: "";
-    display: block;
-    width: 16px;
-    height: 14px;
-    background-image: url("../../assets/like.svg");
-    background-repeat: no-repeat;
-    background-size: contain;
-    transform: translateX(-30%);
+  content: "";
+  display: block;
+  width: 16px;
+  height: 14px;
+  background-image: url("../../assets/like.svg");
+  background-repeat: no-repeat;
+  background-size: contain;
+  transform: translateX(-30%);
 }
 
 .liked::before {
-    background-image: url("../../assets/like-checked.svg");
+  background-image: url("../../assets/like-checked.svg");
 }

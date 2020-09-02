@@ -4,14 +4,15 @@ import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { useForm } from "react-hook-form";
 import CustomSpin from "../../CustonSpin";
-import CustomInput from "../../CustomInput";
-import * as actions from "../../../redux/actions";
+import { InputField, InputButton } from "../../Inputs";
+import * as syncActions from "../../../redux/SyncActions";
+import * as asyncActions from "../../../redux/AsyncActions";
 import formStyles from "../../../formStyles.module.scss";
 import errorMessageBank from "../../../ErrorMessageBank";
 import StatusRender from "../../StatusRender";
 
-const SingIn = ({ login, unsetError, error: errorArray, loading }) => {
-  useEffect(unsetError, []);
+const SingIn = ({ login, userSetError, error: errorArray, loading }) => {
+  useEffect(() => userSetError(null), []);
   const { register, handleSubmit, errors } = useForm();
   const onSubmit = (data) => login(data.email, data.password);
   return (
@@ -49,7 +50,7 @@ const SingIn = ({ login, unsetError, error: errorArray, loading }) => {
           condition: false,
         }}
       />
-      <CustomInput
+      <InputField
         name="email"
         type="email"
         placeholder="Email address"
@@ -59,7 +60,7 @@ const SingIn = ({ login, unsetError, error: errorArray, loading }) => {
         })}
         errors={errors}
       />
-      <CustomInput
+      <InputField
         name="password"
         type="password"
         placeholder="Password"
@@ -69,7 +70,7 @@ const SingIn = ({ login, unsetError, error: errorArray, loading }) => {
         })}
         errors={errors}
       />
-      <CustomInput type="submit" text="Login" />
+      <InputButton type="submit" text="Login" />
       <p className={formStyles["secondary-text"]}>
         Don&apos;t have an account?{" "}
         <Link to="/sing-up" className={formStyles.link}>
@@ -82,7 +83,7 @@ const SingIn = ({ login, unsetError, error: errorArray, loading }) => {
 
 SingIn.propTypes = {
   login: PropTypes.func.isRequired,
-  unsetError: PropTypes.func.isRequired,
+  userSetError: PropTypes.func.isRequired,
   error: PropTypes.objectOf(PropTypes.arrayOf(PropTypes.string)),
   loading: PropTypes.bool,
   user: PropTypes.shape({
@@ -107,8 +108,8 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = {
-  login: actions.login,
-  unsetError: actions.unsetError,
+  login: asyncActions.login,
+  userSetError: syncActions.userSetError,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(SingIn);

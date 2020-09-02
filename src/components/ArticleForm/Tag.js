@@ -1,6 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
-import CustomInput from "../CustomInput";
+import { InputField } from "../Inputs";
 
 import cl from "./ArticleForm.module.scss";
 
@@ -23,7 +23,7 @@ function Tag({ text, id, setTags }) {
   };
   return (
     <div className={cl.tagField}>
-      <CustomInput
+      <InputField
         type="text"
         name={`tag_${text}`}
         value={text}

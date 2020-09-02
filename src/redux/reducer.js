@@ -1,5 +1,5 @@
 import { combineReducers } from "redux";
-import * as types from "./actionTypes";
+import * as types from "./ActionTypes";
 
 const articlesInitialState = {
   loading: false,
@@ -15,9 +15,30 @@ function articles(state = articlesInitialState, action) {
     case types.articlesError:
       return { ...state, error: action.payload.error, loading: false };
     case types.articlesData: {
+      /* 
+      Данные снаружи принимаются в виде объекта из двух полей
+      articles - сами статьи
+      totalPages - количество страниц 
+      */
       const { articles: data, totalPages } = action.payload.data;
-      return { ...state, data, totalPages, loading: false };
+      return {
+        ...state,
+        data,
+        totalPages: totalPages || state.data.totalPages,
+        loading: false,
+      };
     }
+    case types.articlesUpdateData:
+      /* Проходимся по всему массиву со статьями и находим по slug ту, которую надо заменить
+        Важно, чтобы статья лежала в payload */
+      // eslint-disable-next-line no-case-declarations
+      const newArticles = state.data.map((articleItem) => {
+        if (articleItem?.slug === action.payload?.article?.slug) {
+          return action.payload?.article;
+        }
+        return articleItem;
+      });
+      return { ...state, data: newArticles, loading: false };
     default:
       return state;
   }
@@ -36,6 +57,9 @@ function article(state = articleInitialState, action) {
     case types.articleError:
       return { ...state, error: action.payload.error, loading: false };
     case types.articleData: {
+      /*
+      Данные приходят в чистом виде, лежат сразу в payload во избежание лишних оболочек
+      */
       const { article: data } = action.payload.data;
       return { ...state, data, loading: false };
     }
@@ -47,7 +71,7 @@ function article(state = articleInitialState, action) {
 const userInitialState = {
   loading: false,
   error: null,
-  data: null,
+  data: {},
 };
 
 function user(state = userInitialState, action) {
@@ -57,11 +81,10 @@ function user(state = userInitialState, action) {
     case types.userError:
       return { ...state, error: action.payload.error, loading: false };
     case types.userData: {
+      /* Приходит объект payload c информацией о пользователем */
       const { user: data } = action.payload.data;
       return { ...state, data, loading: false };
     }
-    case types.userUnsetError:
-      return { ...state, error: null };
     default:
       return state;
   }

@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import PropTypes from "prop-types";
 import { uniqueId } from "lodash";
-import CustomInput from "../CustomInput";
+import { InputField, InputTextarea, InputButton } from "../Inputs";
 import Tag from "./Tag";
 import StatusRender from "../StatusRender";
 import { ErrorLine } from "../Error";
@@ -58,7 +58,7 @@ function ArticleForm({ title, article, loading, error, callback }) {
           block: null,
         }}
       />
-      <CustomInput
+      <InputField
         name="title"
         type="text"
         placeholder="Title"
@@ -69,7 +69,7 @@ function ArticleForm({ title, article, loading, error, callback }) {
           required: true,
         })}
       />
-      <CustomInput
+      <InputField
         name="short"
         type="text"
         placeholder="Short description"
@@ -80,7 +80,7 @@ function ArticleForm({ title, article, loading, error, callback }) {
           required: true,
         })}
       />
-      <CustomInput
+      <InputTextarea
         name="body"
         type="textarea"
         placeholder="Text"
@@ -105,7 +105,7 @@ function ArticleForm({ title, article, loading, error, callback }) {
         </button>
       </div>
       <div className={cl["submit-button"]}>
-        <CustomInput type="submit" text="Send" />
+        <InputButton type="submit" text="Send" />
       </div>
     </form>
   );

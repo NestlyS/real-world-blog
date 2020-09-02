@@ -3,16 +3,10 @@ import React from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import ArticleForm from "../../ArticleForm";
-import * as actions from "../../../redux/actions";
+import * as actions from "../../../redux/AsyncActions";
 import useFinally from "../../../utils/Hooks";
 
-export const CreateArticle = ({
-  token,
-  loading,
-  error,
-  createArticle,
-  history,
-}) => {
+export const CreateArticle = ({ loading, error, createArticle, history }) => {
   const setSubmitted = useFinally(loading, error, () => history.replace("/"));
   return (
     <ArticleForm
@@ -20,7 +14,7 @@ export const CreateArticle = ({
       loading={loading}
       error={error}
       callback={(...data) => {
-        createArticle(token, ...data);
+        createArticle(...data);
         setSubmitted(true);
       }}
     />
@@ -29,19 +23,16 @@ export const CreateArticle = ({
 
 CreateArticle.propTypes = {
   createArticle: PropTypes.func.isRequired,
-  token: PropTypes.string,
   loading: PropTypes.bool,
   error: PropTypes.instanceOf(Error),
 };
 
 CreateArticle.defaultProps = {
-  token: null,
   loading: false,
   error: null,
 };
 
 const mapStateToProps = (state) => ({
-  token: state?.user?.data?.token,
   loading: state?.article?.loading,
   error: state?.article?.error,
 });

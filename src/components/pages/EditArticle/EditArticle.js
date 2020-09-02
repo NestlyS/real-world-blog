@@ -3,7 +3,7 @@ import React, { useEffect } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import ArticleForm from "../../ArticleForm";
-import * as actions from "../../../redux/actions";
+import * as actions from "../../../redux/AsyncActions";
 import useFinally from "../../../utils/Hooks";
 
 export const EditArticle = ({
@@ -11,7 +11,6 @@ export const EditArticle = ({
   article,
   loading,
   error,
-  token,
   loadArticle,
   updateArticle,
   history,
@@ -29,7 +28,7 @@ export const EditArticle = ({
       loading={loading}
       error={error}
       callback={(...data) => {
-        updateArticle(token, ...data, articleId);
+        updateArticle(articleId, ...data);
         setSubmitted(true);
       }}
       article={{
@@ -45,7 +44,6 @@ export const EditArticle = ({
 EditArticle.propTypes = {
   updateArticle: PropTypes.func.isRequired,
   loadArticle: PropTypes.func.isRequired,
-  token: PropTypes.string,
   loading: PropTypes.bool,
   error: PropTypes.objectOf(PropTypes.arrayOf(PropTypes.string)),
   article: PropTypes.shape({
@@ -72,11 +70,9 @@ EditArticle.defaultProps = {
   article: {},
   loading: false,
   error: null,
-  token: null,
 };
 
 const mapStateToProps = (state) => ({
-  token: state?.user?.data?.token,
   article: state?.article?.data,
   loading: state?.article?.loading,
   error: state?.article?.error,

@@ -3,15 +3,15 @@ import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import { useForm } from "react-hook-form";
-import CustomInput from "../../CustomInput";
-import * as actions from "../../../redux/actions";
+import { InputField, InputButton } from "../../Inputs";
+import * as actions from "../../../redux/AsyncActions";
 import formStyles from "../../../formStyles.module.scss";
 import StatusRender from "../../StatusRender";
 import errorMessageBank from "../../../ErrorMessageBank";
 import { ErrorLine } from "../../Error";
 import inputNames from "./inputNames";
 
-function EditProfile({ update, loading, error: errorArray, token }) {
+function EditProfile({ update, loading, error: errorArray }) {
   const [submitted, setSubmit] = useState(false);
   const { register, clearErrors, setError, handleSubmit, errors } = useForm();
   useMemo(() => {
@@ -31,7 +31,6 @@ function EditProfile({ update, loading, error: errorArray, token }) {
   }, [errorArray, setError, clearErrors]);
   const onSumbit = async (data) => {
     await update(
-      token,
       data.email,
       data.username,
       data.password || null,
@@ -71,7 +70,7 @@ function EditProfile({ update, loading, error: errorArray, token }) {
           ),
         }}
       />
-      <CustomInput
+      <InputField
         name="username"
         placeholder="Username"
         ref={register({
@@ -81,7 +80,7 @@ function EditProfile({ update, loading, error: errorArray, token }) {
         })}
         errors={errors}
       />
-      <CustomInput
+      <InputField
         name="email"
         type="email"
         placeholder="Email address"
@@ -91,7 +90,7 @@ function EditProfile({ update, loading, error: errorArray, token }) {
         })}
         errors={errors}
       />
-      <CustomInput
+      <InputField
         name="password"
         type="password"
         placeholder="New password"
@@ -102,7 +101,7 @@ function EditProfile({ update, loading, error: errorArray, token }) {
         })}
         errors={errors}
       />
-      <CustomInput
+      <InputField
         name="image"
         type="url"
         placeholder="Avatar image (url)"
@@ -111,26 +110,23 @@ function EditProfile({ update, loading, error: errorArray, token }) {
         })}
         errors={errors}
       />
-      <CustomInput type="submit" text="Save" />
+      <InputButton type="submit" text="Save" />
     </form>
   );
 }
 
 EditProfile.propTypes = {
   update: PropTypes.func.isRequired,
-  token: PropTypes.string,
   error: PropTypes.objectOf(PropTypes.arrayOf(PropTypes.string)),
   loading: PropTypes.bool,
 };
 
 EditProfile.defaultProps = {
-  token: null,
   error: null,
   loading: false,
 };
 
 const mapStateToProps = (state) => ({
-  token: state?.user?.data?.token,
   error: state?.user?.error,
 });
 

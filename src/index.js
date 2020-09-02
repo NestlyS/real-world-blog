@@ -7,8 +7,8 @@ import ReduxThunk from "redux-thunk";
 import App from "./components/App";
 import LocalStorageAPI from "./utils/LocalStorageAPI";
 
-import reducer from "./redux/reducer";
-import * as actionTypes from "./redux/actionTypes";
+import reducer from "./redux/Reducer";
+import * as asyncActions from "./redux/AsyncActions";
 
 import "./index.module.scss";
 
@@ -17,12 +17,16 @@ const composeEnhancer = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 /* eslint-disable no-underscore-dangle */
 const store = createStore(
   reducer,
-  composeEnhancer(applyMiddleware(ReduxThunk, LocalStorageAPI.middleware))
+  composeEnhancer(
+    applyMiddleware(ReduxThunk, LocalStorageAPI.saveTokenMiddleware)
+  )
 );
 /* eslint-enable */
 
-const user = JSON.parse(LocalStorageAPI.load("user"));
-store.dispatch({ type: actionTypes.userData, payload: { data: { user } } });
+const token = LocalStorageAPI.load("token");
+if (token) {
+  store.dispatch(asyncActions.getUser(token));
+}
 
 ReactDOM.render(
   <BrowserRouter>

@@ -4,15 +4,16 @@ import { Link } from "react-router-dom";
 import { connect } from "react-redux";
 import { useForm } from "react-hook-form";
 import { ErrorLine } from "../../Error";
-import CustomInput from "../../CustomInput";
+import { InputField, InputCheckbox, InputButton } from "../../Inputs";
 import StatusRender from "../../StatusRender";
-import * as actions from "../../../redux/actions";
+import * as asyncActions from "../../../redux/AsyncActions";
+import * as syncActions from "../../../redux/SyncActions";
 import formStyles from "../../../formStyles.module.scss";
 import errorMessageBank from "../../../ErrorMessageBank";
 import inputNames from "./inputNames";
 
 function SingUp({
-  unsetError,
+  userSetError,
   register: registerAccount,
   error: errorArray,
   loading,
@@ -26,7 +27,7 @@ function SingUp({
     errors,
   } = useForm();
   /* Cбросить ошибки, так как они хранятся в user.error, общем для Sing Up и Sign In */
-  useEffect(unsetError, []);
+  useEffect(() => userSetError(null), []);
   /* Проверить на наличие ошибок от сервера */
   useMemo(() => {
     clearErrors();
@@ -68,7 +69,7 @@ function SingUp({
           condition: false,
         }}
       />
-      <CustomInput
+      <InputField
         name="username"
         placeholder="Username"
         ref={register({
@@ -78,7 +79,7 @@ function SingUp({
         })}
         errors={errors}
       />
-      <CustomInput
+      <InputField
         name="email"
         type="email"
         placeholder="Email address"
@@ -88,7 +89,7 @@ function SingUp({
         })}
         errors={errors}
       />
-      <CustomInput
+      <InputField
         name="password"
         type="password"
         placeholder="Password"
@@ -100,7 +101,7 @@ function SingUp({
         })}
         errors={errors}
       />
-      <CustomInput
+      <InputField
         name="repeatPassword"
         type="password"
         placeholder="Repeat Password"
@@ -111,7 +112,7 @@ function SingUp({
         })}
         errors={errors}
       />
-      <CustomInput
+      <InputCheckbox
         name="agreed"
         type="checkbox"
         text="I agree to the processing of my personal information"
@@ -120,7 +121,7 @@ function SingUp({
         })}
         errors={errors}
       />
-      <CustomInput type="submit" text="Create" />
+      <InputButton type="submit" text="Create" />
       <p className={formStyles["secondary-text"]}>
         Already have an account?{" "}
         <Link to="/sing-in" className={formStyles.link}>
@@ -132,7 +133,7 @@ function SingUp({
 }
 
 SingUp.propTypes = {
-  unsetError: PropTypes.func.isRequired,
+  userSetError: PropTypes.func.isRequired,
   register: PropTypes.func.isRequired,
   error: PropTypes.objectOf(PropTypes.arrayOf(PropTypes.string)),
   loading: PropTypes.bool,
@@ -158,8 +159,8 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = {
-  unsetError: actions.unsetError,
-  register: actions.register,
+  userSetError: syncActions.userSetError,
+  register: asyncActions.register,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(SingUp);

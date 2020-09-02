@@ -36,8 +36,8 @@
     },
     "scripts": {
         "format": "prettier --write ./src",
-        "lint": "eslint --debug ./src",
-        "lint:fix": "eslint --debug ./src --fix --color",
+        "lint": "eslint ./src",
+        "lint:fix": "eslint ./src --fix --color",
         "start": "react-scripts start",
         "build": "react-scripts build",
         "test": "react-scripts test",

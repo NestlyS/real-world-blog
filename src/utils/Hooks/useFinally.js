@@ -1,7 +1,8 @@
 /* eslint-disable import/prefer-default-export */
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 
 export default function useFinally(isAsyncInProcess, isError, callback) {
+  const hookedCallback = useCallback(callback, []);
   const [submitted, setSubmitted] = useState(false);
   useEffect(() => {
     /* Если у нас началась загрузка или форма даже незасабмиттена, то ничего не делаем */
@@ -16,8 +17,8 @@ export default function useFinally(isAsyncInProcess, isError, callback) {
       return;
     }
     /* Если загрузка прошла успешно, то просто делаем коллбек */
-    callback();
-  }, [isError, isAsyncInProcess, submitted]);
+    hookedCallback();
+  }, [isError, isAsyncInProcess, submitted, hookedCallback]);
   /* Возвращаем рычаг для включения работы хука. 
     Обычно сразу после этого должен активироваться флаг, обозначающий начало
     асинхронной операции. 

@@ -1,13 +1,12 @@
 /* eslint-disable react/prop-types */
 import React from "react";
-import { bindActionCreators } from "redux";
 import { connect } from "react-redux";
 import { Link, withRouter } from "react-router-dom";
 import PropTypes from "prop-types";
 
 import avatar from "../../assets/avatar.svg";
 import cl from "./Header.module.scss";
-import * as actions from "../../redux/actions";
+import * as actions from "../../redux/SyncActions";
 
 const Header = ({ user, logout, history }) => {
   const onLogout = () => {
@@ -15,7 +14,7 @@ const Header = ({ user, logout, history }) => {
     history.push("/");
   };
   const renderRightPart = () => {
-    if (user !== null) {
+    if (user.token) {
       return (
         <div className={cl["control-panel"]}>
           <Link
@@ -65,7 +64,9 @@ const Header = ({ user, logout, history }) => {
 
 Header.propTypes = {
   loading: PropTypes.bool,
-  error: PropTypes.objectOf(PropTypes.arrayOf(PropTypes.string)),
+  error: PropTypes.objectOf(
+    PropTypes.oneOfType([PropTypes.arrayOf(PropTypes.string), PropTypes.string])
+  ),
   user: PropTypes.shape({
     email: PropTypes.string,
     token: PropTypes.string,
@@ -88,11 +89,8 @@ const mapStateToProps = (state) => ({
   user: state.user.data,
 });
 
-const mapDispatchToProps = (dispatch) => {
-  const { logout } = bindActionCreators(actions, dispatch);
-  return {
-    logout,
-  };
+const mapDispatchToProps = {
+  logout: actions.logout,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(withRouter(Header));

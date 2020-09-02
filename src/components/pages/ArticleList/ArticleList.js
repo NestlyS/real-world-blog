@@ -3,7 +3,10 @@ import React, { useEffect } from "react";
 import { Pagination } from "antd";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
-import * as actions from "../../../redux/actions";
+import { cloneDeep } from "lodash";
+
+import * as asyncActions from "../../../redux/AsyncActions";
+import * as syncActions from "../../../redux/SyncActions";
 
 import ArticleWrapper from "../../Article";
 import { ErrorBlock } from "../../Error";
@@ -14,32 +17,23 @@ import cl from "./ArticleList.module.scss";
 import "./ArticleList.scss";
 
 const ArticleList = ({
-  token,
   loading,
   error,
   articles,
   page,
   history,
   totalPages,
-  loadArticles: loadArticlesInitial,
-  favoriteArticle: favoriteArticleInitial,
-  unfavoriteArticle: unfavoriteArticleInitial,
+  loadArticles,
+  favoriteArticle,
+  unfavoriteArticle,
+  articlesUpdateData,
 }) => {
-  const loadArticles = () => loadArticlesInitial(page, token);
-  const favoriteArticle = async (articleId) => {
-    await favoriteArticleInitial(token, articleId);
-    loadArticles();
-  };
-  const unfavoriteArticle = async (articleId) => {
-    await unfavoriteArticleInitial(token, articleId);
-    loadArticles();
-  };
   const setPage = (newPage) => {
     history.replace(`/${newPage}`);
   };
   /* Загрузить список статей после загрузки страницы и обновлять их каждые 5 секунд */
   useEffect(() => {
-    loadArticles();
+    loadArticles(page);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [page]);
   return (
@@ -68,8 +62,20 @@ const ArticleList = ({
                 <li key={article.slug} className={cl.block}>
                   <ArticleWrapper
                     article={article}
-                    favoriteArticle={() => favoriteArticle(article.slug)}
-                    unfavoriteArticle={() => unfavoriteArticle(article.slug)}
+                    favoriteArticle={() => {
+                      favoriteArticle(article.slug);
+                      const clone = cloneDeep(article);
+                      clone.favorited = true;
+                      clone.favoritesCount += 1;
+                      articlesUpdateData(clone);
+                    }}
+                    unfavoriteArticle={() => {
+                      unfavoriteArticle(article.slug);
+                      const clone = cloneDeep(article);
+                      clone.favorited = false;
+                      clone.favoritesCount -= 1;
+                      articlesUpdateData(clone);
+                    }}
                   />
                 </li>
               );
@@ -107,10 +113,10 @@ const ArticleList = ({
 };
 
 ArticleList.propTypes = {
-  token: PropTypes.string,
   loadArticles: PropTypes.func.isRequired,
   favoriteArticle: PropTypes.func.isRequired,
   unfavoriteArticle: PropTypes.func.isRequired,
+  articlesUpdateData: PropTypes.func.isRequired,
   loading: PropTypes.bool,
   error: PropTypes.instanceOf(Error),
   articles: PropTypes.arrayOf(
@@ -137,7 +143,6 @@ ArticleList.propTypes = {
 };
 
 ArticleList.defaultProps = {
-  token: "",
   loading: false,
   error: null,
   articles: [],
@@ -146,7 +151,6 @@ ArticleList.defaultProps = {
 };
 
 const mapStateToProps = (state) => ({
-  token: state?.user?.data?.token,
   loading: state.articles.loading,
   error: state.articles.error,
   articles: state.articles.data,
@@ -154,9 +158,10 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = {
-  loadArticles: actions.loadArticles,
-  favoriteArticle: actions.favoriteArticle,
-  unfavoriteArticle: actions.unfavoriteArticle,
+  loadArticles: asyncActions.loadArticles,
+  favoriteArticle: asyncActions.favoriteArticle,
+  unfavoriteArticle: asyncActions.unfavoriteArticle,
+  articlesUpdateData: syncActions.articlesUpdateData,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(ArticleList);

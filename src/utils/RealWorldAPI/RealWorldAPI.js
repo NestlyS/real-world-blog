@@ -1,16 +1,33 @@
-import axios from "axios";
+import axiosLib from "axios";
+import LocalStorageAPI from "../LocalStorageAPI";
 import {
   limit, // limit = 5 по умолчанию
 } from "./config";
 
-const baseUrl = "https://conduit.productionready.io/api";
+// ----------------------------------------------
+// Настройка
 
-export async function getArticles(page = 1, token) {
-  const headers = {};
+const axios = axiosLib.create();
+
+axios.interceptors.request.use((response) => {
+  const token = LocalStorageAPI.load("token");
   if (token) {
-    headers.Authorization = `Token ${token}`;
+    response.headers.common.Authorization = `Token ${token}`;
   }
-  const responce = await axios.get(`${baseUrl}/articles`, {
+  return response;
+});
+
+axios.interceptors.response.use((response) => {
+  return response.data || response;
+});
+
+axios.defaults.baseURL = "https://conduit.productionready.io/api";
+
+// ------------------------------------------------
+// Функции
+
+export async function getArticles(page = 1) {
+  const responce = await axios.get(`/articles`, {
     params: {
       limit,
       offset: limit * (page - 1),
@@ -19,47 +36,37 @@ export async function getArticles(page = 1, token) {
                 сообщения с определенным смещением, причем на
                 первой странице смещение = 0. */
     },
-    headers,
   });
   return {
-    totalPages: responce.data.articlesCount / limit,
-    articles: responce.data.articles,
+    totalPages: responce.articlesCount / limit,
+    articles: responce.articles,
   };
 }
 
-export async function getArticle(articleId, token) {
-  const headers = {};
-  if (token) {
-    headers.Authorization = `Token ${token}`;
-  }
-  const responce = await axios.get(`${baseUrl}/articles/${articleId}`, {
-    headers,
-  });
-  return responce.data;
+export async function getArticle(articleId) {
+  return axios.get(`/articles/${articleId}`);
 }
 
 export async function registration(email, username, password) {
-  const responce = await axios.post(`${baseUrl}/users`, {
+  return axios.post(`/users`, {
     user: {
       username,
       email,
       password,
     },
   });
-  return responce.data;
 }
 
 export async function authentication(email, password) {
-  const responce = await axios.post(`${baseUrl}/users/login`, {
+  return axios.post(`/users/login`, {
     user: {
       email,
       password,
     },
   });
-  return responce.data;
 }
 
-export async function update(token, email, password, username, image) {
+export async function update(email, password, username, image) {
   const user = {
     email,
     username,
@@ -70,21 +77,10 @@ export async function update(token, email, password, username, image) {
   if (image) {
     user.image = image;
   }
-  const responce = await axios.put(
-    `${baseUrl}/user`,
-    {
-      user,
-    },
-    {
-      headers: {
-        Authorization: `Token ${token}`,
-      },
-    }
-  );
-  return responce.data;
+  return axios.put(`/user`, { user });
 }
 
-export async function createArticle(token, title, description, body, tagList) {
+export async function createArticle(title, description, body, tagList) {
   const article = {
     title,
     description,
@@ -93,27 +89,15 @@ export async function createArticle(token, title, description, body, tagList) {
   if (tagList) {
     article.tagList = tagList;
   }
-  const responce = await axios.post(
-    `${baseUrl}/articles`,
-    {
-      article,
-    },
-    {
-      headers: {
-        Authorization: `Token ${token}`,
-      },
-    }
-  );
-  return responce.data;
+  return axios.post(`/articles`, { article });
 }
 
 export async function updateArticle(
-  token,
+  articleId,
   title,
   description,
   body,
-  tagList,
-  articleId
+  tagList
 ) {
   const article = {
     title,
@@ -123,50 +107,21 @@ export async function updateArticle(
   if (tagList) {
     article.tagList = tagList;
   }
-  const responce = await axios.put(
-    `${baseUrl}/articles/${articleId}`,
-    {
-      article,
-    },
-    {
-      headers: {
-        Authorization: `Token ${token}`,
-      },
-    }
-  );
-  return responce.data;
+  return axios.put(`/articles/${articleId}`, { article });
 }
 
-export async function deleteArticle(token, articleId) {
-  const responce = await axios.delete(`${baseUrl}/articles/${articleId}`, {
-    headers: {
-      Authorization: `Token ${token}`,
-    },
-  });
-  return responce.data;
+export async function deleteArticle(articleId) {
+  return axios.delete(`/articles/${articleId}`);
 }
 
-export async function favoriteArticle(token, articleId) {
-  const responce = await axios.post(
-    `${baseUrl}/articles/${articleId}/favorite`,
-    null,
-    {
-      headers: {
-        Authorization: `Token ${token}`,
-      },
-    }
-  );
-  return responce.data;
+export async function favoriteArticle(articleId) {
+  return axios.post(`/articles/${articleId}/favorite`);
 }
 
-export async function unfavoriteArticle(token, articleId) {
-  const responce = await axios.delete(
-    `${baseUrl}/articles/${articleId}/favorite`,
-    {
-      headers: {
-        Authorization: `Token ${token}`,
-      },
-    }
-  );
-  return responce.data;
+export async function unfavoriteArticle(articleId) {
+  return axios.delete(`/articles/${articleId}/favorite`);
+}
+
+export async function getUser() {
+  return axios.get(`/user`);
 }
