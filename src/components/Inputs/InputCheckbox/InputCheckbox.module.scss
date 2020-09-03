@@ -1,54 +1,54 @@
 @import "../../../colors.module.scss";
 .custom-checkbox {
-    margin-top: 21px;
-    padding-top: 8px;
-    border-top: 1px solid $divider-color;
+  margin-top: 21px;
+  padding-top: 8px;
+  border-top: 1px solid $divider-color;
 }
 
 .checkbox {
-    position: absolute;
-    white-space: nowrap;
-    width: 1px;
-    height: 1px;
-    overflow: hidden;
-    border: 0;
-    padding: 0;
-    clip: rect(0 0 0 0);
-    clip-path: inset(50%);
+  position: absolute;
+  white-space: nowrap;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  border: 0;
+  padding: 0;
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
 }
 
 .checkbox-label-primary {
-    display: flex;
-    font-size: 14px;
-    line-height: 1.6em;
-    color: $heading-color;
+  display: flex;
+  font-size: 14px;
+  line-height: 1.6em;
+  color: $heading-color;
 }
 
 .checkbox-label-primary::before {
-    content: "";
-    display: block;
-    margin-top: 4px;
-    margin-right: 8px;
-    flex-shrink: 0;
-    width: 16px;
-    height: 16px;
-    border-radius: 2px;
-    background-color: $info-color;
+  content: "";
+  display: block;
+  margin-top: 4px;
+  margin-right: 8px;
+  flex-shrink: 0;
+  width: 16px;
+  height: 16px;
+  border-radius: 2px;
+  background-color: $info-color;
 }
 
-.checkbox:disabled+.checkbox-label-primary::before {
-    background-color: $info-color-secondary;
+.checkbox:disabled + .checkbox-label-primary::before {
+  background-color: $info-color-secondary;
 }
 
-.checkbox:checked+.checkbox-label-primary::before {
-    background-image: url("../../../assets/check.svg");
-    background-repeat: no-repeat;
-    background-position: center;
-    background-size: 70% 70%;
+.checkbox:checked + .checkbox-label-primary::before {
+  background-image: url("../../../assets/check.svg");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 70% 70%;
 }
 
 .error-message {
-    color: $highlight-color;
-    font-size: 14px;
-    line-height: 1.7em;
+  color: $highlight-color;
+  font-size: 14px;
+  line-height: 1.7em;
 }
