@@ -9,7 +9,7 @@ import StatusRender from "../../StatusRender";
 import * as asyncActions from "../../../redux/AsyncActions";
 import * as syncActions from "../../../redux/SyncActions";
 import formStyles from "../../../formStyles.module.scss";
-import errorMessageBank from "../../../ErrorMessageBank";
+import errorMessageBank from "../../../models/ErrorMessageBank";
 import inputNames from "./inputNames";
 
 function SingUp({
@@ -47,7 +47,7 @@ function SingUp({
   /* Отслеживать вводимый пароль для сравнения с Password Repeat */
   const watchPassword = watch("password", "");
   const onSumbit = (data) =>
-    registerAccount(data.email, data.username, data.password);
+    !loading && registerAccount(data.email, data.username, data.password);
   return (
     <form
       method="post"
@@ -78,6 +78,7 @@ function SingUp({
           maxLength: 20,
         })}
         errors={errors}
+        disabled={loading}
       />
       <InputField
         name="email"
@@ -88,6 +89,7 @@ function SingUp({
           pattern: /^(\w)*[@](\w)*\.(\w){2,}$/,
         })}
         errors={errors}
+        disabled={loading}
       />
       <InputField
         name="password"
@@ -100,6 +102,7 @@ function SingUp({
           maxLength: 40,
         })}
         errors={errors}
+        disabled={loading}
       />
       <InputField
         name="repeatPassword"
@@ -111,6 +114,7 @@ function SingUp({
           validate: (repeatPassword) => repeatPassword === watchPassword,
         })}
         errors={errors}
+        disabled={loading}
       />
       <InputCheckbox
         name="agreed"
@@ -120,6 +124,7 @@ function SingUp({
           required: true,
         })}
         errors={errors}
+        disabled={loading}
       />
       <InputButton type="submit" text="Create" />
       <p className={formStyles["secondary-text"]}>
@@ -154,7 +159,7 @@ SingUp.defaultProps = {
 
 const mapStateToProps = (state) => ({
   error: state.user.error,
-  loading: state.user.error,
+  loading: state.user.loading,
   user: state.user.data,
 });
 

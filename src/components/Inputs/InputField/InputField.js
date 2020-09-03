@@ -1,10 +1,20 @@
 import React from "react";
 import PropTypes from "prop-types";
 import cl from "./InputField.module.scss";
-import errorMessageBank from "../../../ErrorMessageBank";
+import errorMessageBank from "../../../models/ErrorMessageBank";
 
 const InputField = React.forwardRef(function InputField(
-  { name, type, placeholder, errors, autocomplete, short, value, onChange },
+  {
+    name,
+    type,
+    placeholder,
+    errors,
+    autocomplete,
+    short,
+    value,
+    onChange,
+    disabled,
+  },
   ref
 ) {
   const errorMessagesByName = errorMessageBank[name] || {};
@@ -21,6 +31,7 @@ const InputField = React.forwardRef(function InputField(
         ref={ref}
         autoComplete={autocomplete}
         onChange={onChange}
+        disabled={disabled}
       />
       <div className={cl["error-message"]}>
         {errorMessagesByName[errorType]}
@@ -42,6 +53,7 @@ InputField.propTypes = {
   autocomplete: PropTypes.string,
   short: PropTypes.bool,
   onChange: PropTypes.func,
+  disabled: PropTypes.bool,
 };
 
 InputField.defaultProps = {
@@ -52,6 +64,7 @@ InputField.defaultProps = {
   autocomplete: "on",
   short: false,
   onChange: () => {},
+  disabled: false,
 };
 
 export default InputField;

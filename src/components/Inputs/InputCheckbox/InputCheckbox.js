@@ -1,10 +1,10 @@
 import React from "react";
 import PropTypes from "prop-types";
-import errorMessageBank from "../../../ErrorMessageBank";
+import errorMessageBank from "../../../models/ErrorMessageBank";
 import cl from "./InputCheckbox.module.scss";
 
 const InputCheckbox = React.forwardRef(function InputCheckbox(
-  { name, text, errors },
+  { name, text, errors, disabled },
   ref
 ) {
   const errorMessagesByName = errorMessageBank[name];
@@ -17,6 +17,7 @@ const InputCheckbox = React.forwardRef(function InputCheckbox(
         id={cl.checkbox} // id через node-sass нужен только для связи с label
         className={cl.checkbox}
         ref={ref}
+        disabled={disabled}
       />
       <label htmlFor={cl.checkbox} className={cl["checkbox-label-primary"]}>
         {text}
@@ -36,11 +37,13 @@ InputCheckbox.propTypes = {
       type: PropTypes.string,
     })
   ),
+  disabled: PropTypes.bool,
 };
 
 InputCheckbox.defaultProps = {
   text: "",
   errors: {},
+  disabled: false,
 };
 
 export default InputCheckbox;

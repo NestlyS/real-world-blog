@@ -8,13 +8,13 @@ import { InputField, InputButton } from "../../Inputs";
 import * as syncActions from "../../../redux/SyncActions";
 import * as asyncActions from "../../../redux/AsyncActions";
 import formStyles from "../../../formStyles.module.scss";
-import errorMessageBank from "../../../ErrorMessageBank";
+import errorMessageBank from "../../../models/ErrorMessageBank";
 import StatusRender from "../../StatusRender";
 
 const SingIn = ({ login, userSetError, error: errorArray, loading }) => {
   useEffect(() => userSetError(null), []);
   const { register, handleSubmit, errors } = useForm();
-  const onSubmit = (data) => login(data.email, data.password);
+  const onSubmit = (data) => !loading && login(data.email, data.password);
   return (
     <form
       method="post"
@@ -59,6 +59,8 @@ const SingIn = ({ login, userSetError, error: errorArray, loading }) => {
           pattern: /^(\w)*[@](\w)*\.(\w){2,}$/,
         })}
         errors={errors}
+        /* Вырубаем инпут, если загрузка */
+        disabled={loading}
       />
       <InputField
         name="password"
@@ -68,6 +70,7 @@ const SingIn = ({ login, userSetError, error: errorArray, loading }) => {
         ref={register({
           required: true,
         })}
+        disabled={loading}
         errors={errors}
       />
       <InputButton type="submit" text="Login" />

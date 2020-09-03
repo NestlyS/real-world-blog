@@ -2,8 +2,8 @@ import React from "react";
 import PropTypes from "prop-types";
 import { Redirect } from "react-router-dom";
 
-function PrivateRoute({ token, defaultPath, children }) {
-  if (!token) {
+function PrivateRoute({ isLogged, defaultPath, children }) {
+  if (!isLogged) {
     return <Redirect to={defaultPath} />;
   }
 
@@ -11,14 +11,14 @@ function PrivateRoute({ token, defaultPath, children }) {
 }
 
 PrivateRoute.propTypes = {
-  token: PropTypes.oneOfType([PropTypes.string, PropTypes.bool]),
+  isLogged: PropTypes.bool,
   children: PropTypes.node.isRequired,
   defaultPath: PropTypes.string,
 };
 
 PrivateRoute.defaultProps = {
   defaultPath: "/",
-  token: null,
+  isLogged: false,
 };
 
 export default PrivateRoute;

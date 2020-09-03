@@ -2,7 +2,6 @@
 import React, { useEffect } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
-import { cloneDeep } from "lodash";
 
 import * as asyncActions from "../../../redux/AsyncActions";
 import * as syncActions from "../../../redux/SyncActions";
@@ -20,8 +19,8 @@ function SingleArticle({
   error,
   deleteArticle,
   loadArticle,
-  favoriteArticle,
-  unfavoriteArticle,
+  optimisticFavoriteArticle,
+  optimisticUnfavoriteArticle,
   articleSetData,
   history,
 }) {
@@ -65,18 +64,10 @@ function SingleArticle({
               article={article}
               deleteArticle={getDeleteArticle()}
               favoriteArticle={() => {
-                favoriteArticle(article.slug);
-                const clone = cloneDeep(article);
-                clone.favorited = true;
-                clone.favoritesCount += 1;
-                articleSetData(clone);
+                optimisticFavoriteArticle(article, articleSetData);
               }}
               unfavoriteArticle={() => {
-                unfavoriteArticle(article.slug);
-                const clone = cloneDeep(article);
-                clone.favorited = false;
-                clone.favoritesCount -= 1;
-                articleSetData(clone);
+                optimisticUnfavoriteArticle(article, articleSetData);
               }}
               extended
             />
@@ -116,8 +107,8 @@ SingleArticle.propTypes = {
   loading: PropTypes.bool,
   error: PropTypes.bool,
   loadArticle: PropTypes.func.isRequired,
-  favoriteArticle: PropTypes.func.isRequired,
-  unfavoriteArticle: PropTypes.func.isRequired,
+  optimisticFavoriteArticle: PropTypes.func.isRequired,
+  optimisticUnfavoriteArticle: PropTypes.func.isRequired,
   articleSetData: PropTypes.func.isRequired,
 };
 
@@ -138,8 +129,8 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = {
   loadArticle: asyncActions.loadArticle,
   deleteArticle: asyncActions.deleteArticle,
-  favoriteArticle: asyncActions.favoriteArticle,
-  unfavoriteArticle: asyncActions.unfavoriteArticle,
+  optimisticFavoriteArticle: asyncActions.optimisticFavoriteArticle,
+  optimisticUnfavoriteArticle: asyncActions.optimisticUnfavoriteArticle,
   articleSetData: syncActions.articleSetData,
 };
 

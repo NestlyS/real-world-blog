@@ -1,10 +1,10 @@
 import React from "react";
 import PropTypes from "prop-types";
 import cl from "./InputTextarea.module.scss";
-import errorMessageBank from "../../../ErrorMessageBank";
+import errorMessageBank from "../../../models/ErrorMessageBank";
 
 const InputTextarea = React.forwardRef(function InputTextarea(
-  { name, placeholder, errors, rows, autocomplete, value },
+  { name, placeholder, errors, rows, autocomplete, value, disabled },
   ref
 ) {
   const errorMessagesByName = errorMessageBank[name];
@@ -23,6 +23,7 @@ const InputTextarea = React.forwardRef(function InputTextarea(
         ref={ref}
         autoComplete={autocomplete}
         defaultValue={value}
+        disabled={disabled}
       />
       <div className={cl["error-message"]}>
         {errorMessagesByName[errorType]}
@@ -42,6 +43,7 @@ InputTextarea.propTypes = {
   ),
   autocomplete: PropTypes.string,
   rows: PropTypes.string,
+  disabled: PropTypes.bool,
 };
 
 InputTextarea.defaultProps = {
@@ -50,6 +52,7 @@ InputTextarea.defaultProps = {
   value: "",
   autocomplete: "on",
   rows: "10",
+  disabled: false,
 };
 
 export default InputTextarea;

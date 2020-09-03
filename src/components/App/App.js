@@ -1,7 +1,9 @@
 import React from "react";
-import { Route, Switch } from "react-router-dom";
 import { connect } from "react-redux";
+import { Route, Switch } from "react-router-dom";
 import PropTypes from "prop-types";
+
+import RoutesAPI from "../../services/RoutesAPI";
 
 import Header from "../Header";
 import ArticleList from "../pages/ArticleList";
@@ -14,71 +16,71 @@ import CreateArticle from "../pages/CreateArticle";
 import EditArticle from "../pages/EditArticle";
 import PrivateRoute from "../PrivateRoute/PrivateRoute";
 
-function App({ token }) {
+function App({ isLogged }) {
   return (
     <div>
       <Header />
       <Switch>
         <Route
-          path="/new-article"
+          path={RoutesAPI.pathNewArticle()}
           render={({ history }) => (
-            <PrivateRoute token={token} defaultPath="/sign-in">
+            <PrivateRoute isLogged={isLogged} defaultPath="/sign-in">
               <CreateArticle history={history} />
             </PrivateRoute>
           )}
         />
         <Route
-          path="/profile"
+          path={RoutesAPI.pathProfile()}
           render={() => (
-            <PrivateRoute token={token} defaultPath="/sign-in">
+            <PrivateRoute isLogged={isLogged} defaultPath="/sign-in">
               <EditProfile />
             </PrivateRoute>
           )}
         />
         <Route
-          path="/sing-up"
+          path={RoutesAPI.pathSingUp()}
           render={() => (
-            <PrivateRoute token={!token} defaultPath="/">
+            <PrivateRoute isLogged={!isLogged} defaultPath="/">
               <SingUp />
             </PrivateRoute>
           )}
         />
         <Route
-          path="/sing-in"
+          path={RoutesAPI.pathSingIn()}
           render={() => (
-            <PrivateRoute token={!token} defaultPath="/">
+            <PrivateRoute isLogged={!isLogged} defaultPath="/">
               <SingIn />
             </PrivateRoute>
           )}
         />
 
         <Route
-          path="/articles/:articleId/edit"
+          path={RoutesAPI.pathEditArticle()}
           render={({ match, history }) => {
             const { articleId } = match.params;
             return (
-              <PrivateRoute token={token} defaultPath="/sign-in">
+              <PrivateRoute isLogged={isLogged} defaultPath="/sign-in">
                 <EditArticle articleId={articleId} history={history} />
               </PrivateRoute>
             );
           }}
         />
         <Route
-          path="/articles/:articleId"
+          path={RoutesAPI.pathSingleArticle()}
           render={({ match, history }) => {
             const { articleId } = match.params;
             return <SingleArticle articleId={articleId} history={history} />;
           }}
         />
         <Route
-          path="/:page"
+          path={RoutesAPI.pathPage()}
           render={({ match, history }) => {
             const { page } = match.params;
             return <ArticleList page={page} history={history} />;
           }}
         />
-        <Route path="/articles/" component={ArticleList} exact />
-        <Route path="/" component={ArticleList} exact />
+        <Route path={RoutesAPI.pathArticles()} component={ArticleList} exact />
+        <Route path={RoutesAPI.pathMain()} component={ArticleList} exact />
 
         <Route
           render={() => {
@@ -91,15 +93,15 @@ function App({ token }) {
 }
 
 App.propTypes = {
-  token: PropTypes.string,
+  isLogged: PropTypes.bool,
 };
 
 App.defaultProps = {
-  token: null,
+  isLogged: false,
 };
 
 const mapStateToProps = (state) => ({
-  token: state?.user?.data?.token,
+  isLogged: state.isLoggedIn,
 });
 
 export default connect(mapStateToProps)(App);

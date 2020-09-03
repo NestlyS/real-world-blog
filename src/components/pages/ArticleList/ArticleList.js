@@ -3,7 +3,6 @@ import React, { useEffect } from "react";
 import { Pagination } from "antd";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
-import { cloneDeep } from "lodash";
 
 import * as asyncActions from "../../../redux/AsyncActions";
 import * as syncActions from "../../../redux/SyncActions";
@@ -24,8 +23,8 @@ const ArticleList = ({
   history,
   totalPages,
   loadArticles,
-  favoriteArticle,
-  unfavoriteArticle,
+  optimisticFavoriteArticle,
+  optimisticUnfavoriteArticle,
   articlesUpdateData,
 }) => {
   const setPage = (newPage) => {
@@ -63,18 +62,10 @@ const ArticleList = ({
                   <ArticleWrapper
                     article={article}
                     favoriteArticle={() => {
-                      favoriteArticle(article.slug);
-                      const clone = cloneDeep(article);
-                      clone.favorited = true;
-                      clone.favoritesCount += 1;
-                      articlesUpdateData(clone);
+                      optimisticFavoriteArticle(article, articlesUpdateData);
                     }}
                     unfavoriteArticle={() => {
-                      unfavoriteArticle(article.slug);
-                      const clone = cloneDeep(article);
-                      clone.favorited = false;
-                      clone.favoritesCount -= 1;
-                      articlesUpdateData(clone);
+                      optimisticUnfavoriteArticle(article, articlesUpdateData);
                     }}
                   />
                 </li>
@@ -114,8 +105,8 @@ const ArticleList = ({
 
 ArticleList.propTypes = {
   loadArticles: PropTypes.func.isRequired,
-  favoriteArticle: PropTypes.func.isRequired,
-  unfavoriteArticle: PropTypes.func.isRequired,
+  optimisticFavoriteArticle: PropTypes.func.isRequired,
+  optimisticUnfavoriteArticle: PropTypes.func.isRequired,
   articlesUpdateData: PropTypes.func.isRequired,
   loading: PropTypes.bool,
   error: PropTypes.instanceOf(Error),
@@ -159,8 +150,8 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = {
   loadArticles: asyncActions.loadArticles,
-  favoriteArticle: asyncActions.favoriteArticle,
-  unfavoriteArticle: asyncActions.unfavoriteArticle,
+  optimisticFavoriteArticle: asyncActions.optimisticFavoriteArticle,
+  optimisticUnfavoriteArticle: asyncActions.optimisticUnfavoriteArticle,
   articlesUpdateData: syncActions.articlesUpdateData,
 };
 

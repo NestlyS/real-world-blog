@@ -33,8 +33,8 @@ function articles(state = articlesInitialState, action) {
         Важно, чтобы статья лежала в payload */
       // eslint-disable-next-line no-case-declarations
       const newArticles = state.data.map((articleItem) => {
-        if (articleItem?.slug === action.payload?.article?.slug) {
-          return action.payload?.article;
+        if (articleItem?.slug === action.payload?.data?.article?.slug) {
+          return action.payload?.data?.article;
         }
         return articleItem;
       });
@@ -90,8 +90,20 @@ function user(state = userInitialState, action) {
   }
 }
 
+function isLoggedIn(state = false, action) {
+  switch (action.type) {
+    case types.setLoggedIn:
+      return true;
+    case types.setUnloggedIn:
+      return false;
+    default:
+      return state;
+  }
+}
+
 export default combineReducers({
   articles,
   article,
   user,
+  isLoggedIn,
 });

@@ -5,27 +5,28 @@ import { createStore, compose, applyMiddleware } from "redux";
 import { Provider } from "react-redux";
 import ReduxThunk from "redux-thunk";
 import App from "./components/App";
-import LocalStorageAPI from "./utils/LocalStorageAPI";
+import LocalStorageAPI from "./services/LocalStorageAPI";
 
 import reducer from "./redux/Reducer";
 import * as asyncActions from "./redux/AsyncActions";
+import * as syncActions from "./redux/SyncActions";
 
 import "./index.module.scss";
 
 const composeEnhancer = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 
-/* eslint-disable no-underscore-dangle */
 const store = createStore(
   reducer,
   composeEnhancer(
     applyMiddleware(ReduxThunk, LocalStorageAPI.saveTokenMiddleware)
   )
 );
-/* eslint-enable */
 
-const token = LocalStorageAPI.load("token");
-if (token) {
-  store.dispatch(asyncActions.getUser(token));
+if (LocalStorageAPI.load("token")) {
+  store.dispatch(asyncActions.getUser());
+  store.dispatch(syncActions.setLoggedIn());
+} else {
+  store.dispatch(syncActions.setUnloggedIn());
 }
 
 ReactDOM.render(

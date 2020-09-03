@@ -10,3 +10,6 @@ export const articleError = "SET_ARTICLE_STATE_ERROR";
 export const userLoading = "SET_USER_STATE_LOADING";
 export const userData = "SET_USER_DATA";
 export const userError = "SET_USER_STATE_ERROR";
+
+export const setLoggedIn = "SET_LOGGED_IN";
+export const setUnloggedIn = "SET_UNLOGGED_IN";

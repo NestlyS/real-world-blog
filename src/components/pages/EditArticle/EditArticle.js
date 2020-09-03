@@ -3,7 +3,8 @@ import React, { useEffect } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import ArticleForm from "../../ArticleForm";
-import * as actions from "../../../redux/AsyncActions";
+import * as asyncActions from "../../../redux/AsyncActions";
+import * as syncActions from "../../../redux/SyncActions";
 import useFinally from "../../../utils/Hooks";
 
 export const EditArticle = ({
@@ -14,7 +15,9 @@ export const EditArticle = ({
   loadArticle,
   updateArticle,
   history,
+  articleSetError,
 }) => {
+  useEffect(() => articleSetError(null), []);
   useEffect(() => {
     if (!article || article.slug !== articleId) {
       loadArticle(articleId);
@@ -79,8 +82,9 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = {
-  updateArticle: actions.updateArticle,
-  loadArticle: actions.loadArticle,
+  updateArticle: asyncActions.updateArticle,
+  loadArticle: asyncActions.loadArticle,
+  articleSetError: syncActions.articleSetError,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(EditArticle);

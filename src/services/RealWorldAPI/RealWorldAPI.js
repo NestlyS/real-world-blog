@@ -1,5 +1,7 @@
 import axiosLib from "axios";
 import LocalStorageAPI from "../LocalStorageAPI";
+import ServerRoutesAPI from "../ServerRoutesAPI";
+
 import {
   limit, // limit = 5 по умолчанию
 } from "./config";
@@ -18,16 +20,17 @@ axios.interceptors.request.use((response) => {
 });
 
 axios.interceptors.response.use((response) => {
-  return response.data || response;
+  if (!response.data) {
+    throw new Error("No data! Check Internet connection!");
+  }
+  return response.data;
 });
-
-axios.defaults.baseURL = "https://conduit.productionready.io/api";
 
 // ------------------------------------------------
 // Функции
 
 export async function getArticles(page = 1) {
-  const responce = await axios.get(`/articles`, {
+  const responce = await axios.get(ServerRoutesAPI.pathArticles(), {
     params: {
       limit,
       offset: limit * (page - 1),
@@ -44,11 +47,11 @@ export async function getArticles(page = 1) {
 }
 
 export async function getArticle(articleId) {
-  return axios.get(`/articles/${articleId}`);
+  return axios.get(ServerRoutesAPI.pathArticle(articleId));
 }
 
 export async function registration(email, username, password) {
-  return axios.post(`/users`, {
+  return axios.post(ServerRoutesAPI.pathRegistration(), {
     user: {
       username,
       email,
@@ -58,7 +61,7 @@ export async function registration(email, username, password) {
 }
 
 export async function authentication(email, password) {
-  return axios.post(`/users/login`, {
+  return axios.post(ServerRoutesAPI.pathAuthentication(), {
     user: {
       email,
       password,
@@ -77,7 +80,7 @@ export async function update(email, password, username, image) {
   if (image) {
     user.image = image;
   }
-  return axios.put(`/user`, { user });
+  return axios.put(ServerRoutesAPI.pathUpdate(), { user });
 }
 
 export async function createArticle(title, description, body, tagList) {
@@ -89,7 +92,7 @@ export async function createArticle(title, description, body, tagList) {
   if (tagList) {
     article.tagList = tagList;
   }
-  return axios.post(`/articles`, { article });
+  return axios.post(ServerRoutesAPI.pathCreateArticle(), { article });
 }
 
 export async function updateArticle(
@@ -107,21 +110,21 @@ export async function updateArticle(
   if (tagList) {
     article.tagList = tagList;
   }
-  return axios.put(`/articles/${articleId}`, { article });
+  return axios.put(ServerRoutesAPI.pathUpdateArticle(articleId), { article });
 }
 
 export async function deleteArticle(articleId) {
-  return axios.delete(`/articles/${articleId}`);
+  return axios.delete(ServerRoutesAPI.pathDeleteArticle(articleId));
 }
 
 export async function favoriteArticle(articleId) {
-  return axios.post(`/articles/${articleId}/favorite`);
+  return axios.post(ServerRoutesAPI.pathFavoriteArticle(articleId));
 }
 
 export async function unfavoriteArticle(articleId) {
-  return axios.delete(`/articles/${articleId}/favorite`);
+  return axios.delete(ServerRoutesAPI.pathUnfavoriteArticle(articleId));
 }
 
 export async function getUser() {
-  return axios.get(`/user`);
+  return axios.get(ServerRoutesAPI.getUser());
 }

@@ -4,7 +4,7 @@ import { InputField } from "../Inputs";
 
 import cl from "./ArticleForm.module.scss";
 
-function Tag({ text, id, setTags }) {
+function Tag({ text, id, setTags, disabled }) {
   const onChangeTagName = (event) => {
     const { value } = event.target;
     setTags((state) => {
@@ -17,6 +17,9 @@ function Tag({ text, id, setTags }) {
     });
   };
   const onDeleteTag = () => {
+    if (disabled) {
+      return;
+    }
     setTags((state) => {
       return state.filter((item) => id !== item.id);
     });
@@ -30,6 +33,7 @@ function Tag({ text, id, setTags }) {
         placeholder="Tag"
         onChange={onChangeTagName}
         short
+        disabled={disabled}
       />
       <button
         type="button"
@@ -46,6 +50,11 @@ Tag.propTypes = {
   text: PropTypes.string.isRequired,
   id: PropTypes.string.isRequired,
   setTags: PropTypes.func.isRequired,
+  disabled: PropTypes.bool,
+};
+
+Tag.defaultProps = {
+  disabled: false,
 };
 
 export default Tag;

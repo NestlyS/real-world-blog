@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import PropTypes from "prop-types";
 import { uniqueId } from "lodash";
@@ -6,24 +6,35 @@ import { InputField, InputTextarea, InputButton } from "../Inputs";
 import Tag from "./Tag";
 import StatusRender from "../StatusRender";
 import { ErrorLine } from "../Error";
-import errorMessageBank from "../../ErrorMessageBank";
+import errorMessageBank from "../../models/ErrorMessageBank";
 
 import formStyles from "../../formStyles.module.scss";
 import cl from "./ArticleForm.module.scss";
 
 function ArticleForm({ title, article, loading, error, callback }) {
   const { register, handleSubmit, errors } = useForm();
-  let initialTags = article?.tags?.map((text) => ({
-    id: uniqueId("tag_"),
-    text,
-  }));
-  if (initialTags === undefined || initialTags?.length === 0) {
-    initialTags = [{ id: uniqueId("tag_"), text: "" }];
-  }
-  const [tags, setTags] = useState(initialTags);
-  const onAddNewTag = () =>
+  const [tags, setTags] = useState([{ id: uniqueId("tag_"), text: "" }]);
+  useEffect(() => {
+    if (article.tags === undefined) {
+      return;
+    }
+    setTags(
+      article.tags.map((text) => ({
+        id: uniqueId("tag_"),
+        text,
+      }))
+    );
+  }, [article.tags]);
+  const onAddNewTag = () => {
+    if (loading) {
+      return;
+    }
     setTags((state) => [...state, { id: uniqueId("tag_"), text: "" }]);
+  };
   const onSubmit = (data) => {
+    if (loading) {
+      return;
+    }
     callback(
       data.title,
       data.short,
@@ -33,7 +44,15 @@ function ArticleForm({ title, article, loading, error, callback }) {
   };
   const renderTags = () =>
     tags?.map(({ id, text }) => {
-      return <Tag key={id} text={text} id={id} setTags={setTags} />;
+      return (
+        <Tag
+          key={id}
+          text={text}
+          id={id}
+          setTags={setTags}
+          disabled={loading}
+        />
+      );
     });
   return (
     <form
@@ -68,6 +87,7 @@ function ArticleForm({ title, article, loading, error, callback }) {
         ref={register({
           required: true,
         })}
+        disabled={loading}
       />
       <InputField
         name="short"
@@ -79,6 +99,7 @@ function ArticleForm({ title, article, loading, error, callback }) {
         ref={register({
           required: true,
         })}
+        disabled={loading}
       />
       <InputTextarea
         name="body"
@@ -90,6 +111,7 @@ function ArticleForm({ title, article, loading, error, callback }) {
         ref={register({
           required: true,
         })}
+        disabled={loading}
       />
       <div className={cl["tags-container"]}>
         <label className={cl.label} htmlFor="tag_last">
